@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import matter from "gray-matter";
 import type { Discipline, TechniqueDoc, TechniqueFrontmatter } from "./types";
+import type { PoseData } from "./poses";
 
 const contentDir = path.join(process.cwd(), "content");
 
@@ -46,6 +47,20 @@ export function getTechnique(
   const raw = fs.readFileSync(filePath, "utf-8");
   const { data, content } = matter(raw);
   return { frontmatter: parseFrontmatter(data), content, slug };
+}
+
+export function getPoses(
+  discipline: Discipline,
+  beltLevel: string,
+  slug: string
+): PoseData | null {
+  const filePath = path.join(contentDir, discipline, beltLevel, `${slug}.poses.json`);
+  if (!fs.existsSync(filePath)) return null;
+  try {
+    return JSON.parse(fs.readFileSync(filePath, "utf-8")) as PoseData;
+  } catch {
+    return null;
+  }
 }
 
 export function getAllTechniqueSlugs(): {
