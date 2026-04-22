@@ -1,0 +1,50 @@
+{
+  "title": "Fighting Stance (Gyeorugi Seogi)",
+  "loop": true,
+  "frames": [
+    {
+      "duration": 700,
+      "ease": "ease-in-out",
+      "label": "Guard",
+      "joints": {
+        "head":      { "x": 50, "y": 8  },
+        "neck":      { "x": 49, "y": 15 },
+        "spine":     { "x": 48, "y": 50 },
+        "shoulderL": { "x": 54, "y": 21 },
+        "shoulderR": { "x": 42, "y": 21 },
+        "elbowL":    { "x": 60, "y": 30 },
+        "elbowR":    { "x": 36, "y": 30 },
+        "handL":     { "x": 62, "y": 21 },
+        "handR":     { "x": 39, "y": 22 },
+        "hipL":      { "x": 52, "y": 52 },
+        "hipR":      { "x": 44, "y": 52 },
+        "kneeL":     { "x": 55, "y": 70 },
+        "kneeR":     { "x": 40, "y": 70 },
+        "footL":     { "x": 60, "y": 92 },
+        "footR":     { "x": 34, "y": 92 }
+      }
+    },
+    {
+      "duration": 700,
+      "ease": "ease-in-out",
+      "label": "Weight Shift",
+      "joints": {
+        "head":      { "x": 50, "y": 9  },
+        "neck":      { "x": 49, "y": 16 },
+        "spine":     { "x": 48, "y": 51 },
+        "shoulderL": { "x": 54, "y": 22 },
+        "shoulderR": { "x": 42, "y": 22 },
+        "elbowL":    { "x": 60, "y": 31 },
+        "elbowR":    { "x": 36, "y": 31 },
+        "handL":     { "x": 62, "y": 22 },
+        "handR":     { "x": 39, "y": 23 },
+        "hipL":      { "x": 52, "y": 53 },
+        "hipR":      { "x": 44, "y": 53 },
+        "kneeL":     { "x": 55, "y": 72 },
+        "kneeR":     { "x": 40, "y": 72 },
+        "footL":     { "x": 60, "y": 92 },
+        "footR":     { "x": 34, "y": 92 }
+      }
+    }
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "title": "Attention Stance (Charyeot Seogi)",
+  "loop": true,
+  "frames": [
+    {
+      "duration": 2500,
+      "ease": "ease-in-out",
+      "label": "Attention",
+      "joints": {
+        "head":      { "x": 50, "y": 8  },
+        "neck":      { "x": 50, "y": 15 },
+        "spine":     { "x": 50, "y": 50 },
+        "shoulderL": { "x": 44, "y": 21 },
+        "shoulderR": { "x": 57, "y": 21 },
+        "elbowL":    { "x": 41, "y": 38 },
+        "elbowR":    { "x": 60, "y": 38 },
+        "handL":     { "x": 40, "y": 56 },
+        "handR":     { "x": 61, "y": 56 },
+        "hipL":      { "x": 47, "y": 52 },
+        "hipR":      { "x": 54, "y": 52 },
+        "kneeL":     { "x": 47, "y": 72 },
+        "kneeR":     { "x": 54, "y": 72 },
+        "footL":     { "x": 46, "y": 94 },
+        "footR":     { "x": 55, "y": 94 }
+      }
+    },
+    {
+      "duration": 2500,
+      "ease": "ease-in-out",
+      "label": "Hold",
+      "joints": {
+        "head":      { "x": 50, "y": 8  },
+        "neck":      { "x": 50, "y": 15 },
+        "spine":     { "x": 50, "y": 50 },
+        "shoulderL": { "x": 44, "y": 21 },
+        "shoulderR": { "x": 57, "y": 21 },
+        "elbowL":    { "x": 41, "y": 38 },
+        "elbowR":    { "x": 60, "y": 38 },
+        "handL":     { "x": 40, "y": 55 },
+        "handR":     { "x": 61, "y": 55 },
+        "hipL":      { "x": 47, "y": 52 },
+        "hipR":      { "x": 54, "y": 52 },
+        "kneeL":     { "x": 47, "y": 72 },
+        "kneeR":     { "x": 54, "y": 72 },
+        "footL":     { "x": 46, "y": 94 },
+        "footR":     { "x": 55, "y": 94 }
+      }
+    }
+  ]
+}

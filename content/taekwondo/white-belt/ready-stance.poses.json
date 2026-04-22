@@ -1,0 +1,50 @@
+{
+  "title": "Ready Stance (Junbi Seogi)",
+  "loop": true,
+  "frames": [
+    {
+      "duration": 2000,
+      "ease": "ease-in-out",
+      "label": "Junbi",
+      "joints": {
+        "head":      { "x": 50, "y": 8  },
+        "neck":      { "x": 50, "y": 15 },
+        "spine":     { "x": 50, "y": 50 },
+        "shoulderL": { "x": 44, "y": 21 },
+        "shoulderR": { "x": 57, "y": 21 },
+        "elbowL":    { "x": 41, "y": 42 },
+        "elbowR":    { "x": 60, "y": 42 },
+        "handL":     { "x": 44, "y": 55 },
+        "handR":     { "x": 57, "y": 55 },
+        "hipL":      { "x": 45, "y": 52 },
+        "hipR":      { "x": 56, "y": 52 },
+        "kneeL":     { "x": 45, "y": 72 },
+        "kneeR":     { "x": 56, "y": 72 },
+        "footL":     { "x": 43, "y": 94 },
+        "footR":     { "x": 58, "y": 94 }
+      }
+    },
+    {
+      "duration": 2000,
+      "ease": "ease-in-out",
+      "label": "Ready",
+      "joints": {
+        "head":      { "x": 50, "y": 8  },
+        "neck":      { "x": 50, "y": 15 },
+        "spine":     { "x": 50, "y": 51 },
+        "shoulderL": { "x": 44, "y": 22 },
+        "shoulderR": { "x": 57, "y": 22 },
+        "elbowL":    { "x": 41, "y": 43 },
+        "elbowR":    { "x": 60, "y": 43 },
+        "handL":     { "x": 44, "y": 56 },
+        "handR":     { "x": 57, "y": 56 },
+        "hipL":      { "x": 45, "y": 53 },
+        "hipR":      { "x": 56, "y": 53 },
+        "kneeL":     { "x": 45, "y": 73 },
+        "kneeR":     { "x": 56, "y": 73 },
+        "footL":     { "x": 43, "y": 94 },
+        "footR":     { "x": 58, "y": 94 }
+      }
+    }
+  ]
+}

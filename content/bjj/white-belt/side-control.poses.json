@@ -1,0 +1,50 @@
+{
+  "title": "Side Control",
+  "loop": true,
+  "frames": [
+    {
+      "duration": 2000,
+      "ease": "ease-in-out",
+      "label": "Side Control",
+      "joints": {
+        "head":      { "x": 50, "y": 8  },
+        "neck":      { "x": 50, "y": 16 },
+        "spine":     { "x": 50, "y": 55 },
+        "shoulderL": { "x": 37, "y": 21 },
+        "shoulderR": { "x": 64, "y": 21 },
+        "elbowL":    { "x": 26, "y": 38 },
+        "elbowR":    { "x": 76, "y": 38 },
+        "handL":     { "x": 18, "y": 54 },
+        "handR":     { "x": 84, "y": 54 },
+        "hipL":      { "x": 40, "y": 70 },
+        "hipR":      { "x": 62, "y": 70 },
+        "kneeL":     { "x": 32, "y": 88 },
+        "kneeR":     { "x": 70, "y": 88 },
+        "footL":     { "x": 24, "y": 97 },
+        "footR":     { "x": 78, "y": 97 }
+      }
+    },
+    {
+      "duration": 2000,
+      "ease": "ease-in-out",
+      "label": "Weight Down",
+      "joints": {
+        "head":      { "x": 50, "y": 10 },
+        "neck":      { "x": 50, "y": 18 },
+        "spine":     { "x": 50, "y": 57 },
+        "shoulderL": { "x": 37, "y": 23 },
+        "shoulderR": { "x": 64, "y": 23 },
+        "elbowL":    { "x": 26, "y": 40 },
+        "elbowR":    { "x": 76, "y": 40 },
+        "handL":     { "x": 18, "y": 56 },
+        "handR":     { "x": 84, "y": 56 },
+        "hipL":      { "x": 40, "y": 72 },
+        "hipR":      { "x": 62, "y": 72 },
+        "kneeL":     { "x": 32, "y": 88 },
+        "kneeR":     { "x": 70, "y": 88 },
+        "footL":     { "x": 24, "y": 97 },
+        "footR":     { "x": 78, "y": 97 }
+      }
+    }
+  ]
+}

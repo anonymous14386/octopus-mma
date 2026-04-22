@@ -1,0 +1,50 @@
+{
+  "title": "Back Stance (Dwitkubi Seogi)",
+  "loop": true,
+  "frames": [
+    {
+      "duration": 2000,
+      "ease": "ease-in-out",
+      "label": "Back Stance",
+      "joints": {
+        "head":      { "x": 49, "y": 8  },
+        "neck":      { "x": 48, "y": 15 },
+        "spine":     { "x": 47, "y": 50 },
+        "shoulderL": { "x": 52, "y": 21 },
+        "shoulderR": { "x": 42, "y": 21 },
+        "elbowL":    { "x": 58, "y": 31 },
+        "elbowR":    { "x": 36, "y": 31 },
+        "handL":     { "x": 63, "y": 42 },
+        "handR":     { "x": 40, "y": 42 },
+        "hipL":      { "x": 51, "y": 52 },
+        "hipR":      { "x": 43, "y": 52 },
+        "kneeL":     { "x": 54, "y": 70 },
+        "kneeR":     { "x": 43, "y": 72 },
+        "footL":     { "x": 60, "y": 92 },
+        "footR":     { "x": 37, "y": 93 }
+      }
+    },
+    {
+      "duration": 2000,
+      "ease": "ease-in-out",
+      "label": "Hold",
+      "joints": {
+        "head":      { "x": 49, "y": 9  },
+        "neck":      { "x": 48, "y": 16 },
+        "spine":     { "x": 47, "y": 51 },
+        "shoulderL": { "x": 52, "y": 22 },
+        "shoulderR": { "x": 42, "y": 22 },
+        "elbowL":    { "x": 58, "y": 32 },
+        "elbowR":    { "x": 36, "y": 32 },
+        "handL":     { "x": 63, "y": 43 },
+        "handR":     { "x": 40, "y": 43 },
+        "hipL":      { "x": 51, "y": 53 },
+        "hipR":      { "x": 43, "y": 53 },
+        "kneeL":     { "x": 54, "y": 71 },
+        "kneeR":     { "x": 43, "y": 73 },
+        "footL":     { "x": 60, "y": 92 },
+        "footR":     { "x": 37, "y": 93 }
+      }
+    }
+  ]
+}

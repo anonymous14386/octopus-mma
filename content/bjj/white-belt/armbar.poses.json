@@ -1,0 +1,117 @@
+{
+  "title": "Armbar (Juji Gatame)",
+  "loop": true,
+  "frames": [
+    {
+      "duration": 1200,
+      "ease": "ease-in-out",
+      "label": "Guard Setup",
+      "joints": {
+        "head":      { "x": 20, "y": 52 },
+        "neck":      { "x": 26, "y": 52 },
+        "spine":     { "x": 50, "y": 56 },
+        "shoulderL": { "x": 28, "y": 47 },
+        "shoulderR": { "x": 28, "y": 58 },
+        "elbowL":    { "x": 18, "y": 42 },
+        "elbowR":    { "x": 18, "y": 63 },
+        "handL":     { "x": 10, "y": 38 },
+        "handR":     { "x": 10, "y": 67 },
+        "hipL":      { "x": 62, "y": 49 },
+        "hipR":      { "x": 62, "y": 62 },
+        "kneeL":     { "x": 76, "y": 38 },
+        "kneeR":     { "x": 76, "y": 68 },
+        "footL":     { "x": 86, "y": 55 },
+        "footR":     { "x": 86, "y": 55 }
+      }
+    },
+    {
+      "duration": 600,
+      "ease": "ease-out",
+      "label": "Pivot",
+      "joints": {
+        "head":      { "x": 20, "y": 56 },
+        "neck":      { "x": 26, "y": 54 },
+        "spine":     { "x": 50, "y": 58 },
+        "shoulderL": { "x": 28, "y": 50 },
+        "shoulderR": { "x": 28, "y": 62 },
+        "elbowL":    { "x": 18, "y": 45 },
+        "elbowR":    { "x": 18, "y": 67 },
+        "handL":     { "x": 40, "y": 52 },
+        "handR":     { "x": 10, "y": 70 },
+        "hipL":      { "x": 62, "y": 52 },
+        "hipR":      { "x": 62, "y": 65 },
+        "kneeL":     { "x": 74, "y": 34 },
+        "kneeR":     { "x": 70, "y": 70 },
+        "footL":     { "x": 56, "y": 28 },
+        "footR":     { "x": 80, "y": 75 }
+      }
+    },
+    {
+      "duration": 350,
+      "ease": "ease-in-out",
+      "label": "Extend",
+      "highlight": ["handL", "elbowL"],
+      "joints": {
+        "head":      { "x": 20, "y": 56 },
+        "neck":      { "x": 26, "y": 54 },
+        "spine":     { "x": 50, "y": 59 },
+        "shoulderL": { "x": 28, "y": 50 },
+        "shoulderR": { "x": 28, "y": 63 },
+        "elbowL":    { "x": 18, "y": 46 },
+        "elbowR":    { "x": 18, "y": 68 },
+        "handL":     { "x": 42, "y": 52 },
+        "handR":     { "x": 10, "y": 70 },
+        "hipL":      { "x": 64, "y": 51 },
+        "hipR":      { "x": 64, "y": 66 },
+        "kneeL":     { "x": 72, "y": 32 },
+        "kneeR":     { "x": 68, "y": 72 },
+        "footL":     { "x": 54, "y": 24 },
+        "footR":     { "x": 80, "y": 76 }
+      }
+    },
+    {
+      "duration": 400,
+      "ease": "ease-in",
+      "label": "Return",
+      "joints": {
+        "head":      { "x": 20, "y": 56 },
+        "neck":      { "x": 26, "y": 54 },
+        "spine":     { "x": 50, "y": 58 },
+        "shoulderL": { "x": 28, "y": 50 },
+        "shoulderR": { "x": 28, "y": 62 },
+        "elbowL":    { "x": 18, "y": 45 },
+        "elbowR":    { "x": 18, "y": 67 },
+        "handL":     { "x": 40, "y": 52 },
+        "handR":     { "x": 10, "y": 70 },
+        "hipL":      { "x": 62, "y": 52 },
+        "hipR":      { "x": 62, "y": 65 },
+        "kneeL":     { "x": 74, "y": 34 },
+        "kneeR":     { "x": 70, "y": 70 },
+        "footL":     { "x": 56, "y": 28 },
+        "footR":     { "x": 80, "y": 75 }
+      }
+    },
+    {
+      "duration": 900,
+      "ease": "ease-in-out",
+      "label": "Reset",
+      "joints": {
+        "head":      { "x": 20, "y": 52 },
+        "neck":      { "x": 26, "y": 52 },
+        "spine":     { "x": 50, "y": 56 },
+        "shoulderL": { "x": 28, "y": 47 },
+        "shoulderR": { "x": 28, "y": 58 },
+        "elbowL":    { "x": 18, "y": 42 },
+        "elbowR":    { "x": 18, "y": 63 },
+        "handL":     { "x": 10, "y": 38 },
+        "handR":     { "x": 10, "y": 67 },
+        "hipL":      { "x": 62, "y": 49 },
+        "hipR":      { "x": 62, "y": 62 },
+        "kneeL":     { "x": 76, "y": 38 },
+        "kneeR":     { "x": 76, "y": 68 },
+        "footL":     { "x": 86, "y": 55 },
+        "footR":     { "x": 86, "y": 55 }
+      }
+    }
+  ]
+}

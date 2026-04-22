@@ -1,0 +1,117 @@
+{
+  "title": "Low Block (Naeryeo Makgi)",
+  "loop": true,
+  "frames": [
+    {
+      "duration": 1200,
+      "ease": "ease-in-out",
+      "label": "Walking Stance",
+      "joints": {
+        "head":      { "x": 50, "y": 8  },
+        "neck":      { "x": 50, "y": 15 },
+        "spine":     { "x": 49, "y": 50 },
+        "shoulderL": { "x": 46, "y": 21 },
+        "shoulderR": { "x": 56, "y": 21 },
+        "elbowL":    { "x": 40, "y": 35 },
+        "elbowR":    { "x": 62, "y": 35 },
+        "handL":     { "x": 37, "y": 50 },
+        "handR":     { "x": 65, "y": 50 },
+        "hipL":      { "x": 47, "y": 52 },
+        "hipR":      { "x": 55, "y": 52 },
+        "kneeL":     { "x": 49, "y": 71 },
+        "kneeR":     { "x": 54, "y": 71 },
+        "footL":     { "x": 53, "y": 93 },
+        "footR":     { "x": 43, "y": 93 }
+      }
+    },
+    {
+      "duration": 500,
+      "ease": "ease-out",
+      "label": "Wind Up",
+      "joints": {
+        "head":      { "x": 50, "y": 8  },
+        "neck":      { "x": 50, "y": 15 },
+        "spine":     { "x": 49, "y": 50 },
+        "shoulderL": { "x": 46, "y": 21 },
+        "shoulderR": { "x": 56, "y": 21 },
+        "elbowL":    { "x": 54, "y": 22 },
+        "elbowR":    { "x": 64, "y": 32 },
+        "handL":     { "x": 60, "y": 12 },
+        "handR":     { "x": 72, "y": 26 },
+        "hipL":      { "x": 47, "y": 52 },
+        "hipR":      { "x": 55, "y": 52 },
+        "kneeL":     { "x": 49, "y": 71 },
+        "kneeR":     { "x": 54, "y": 71 },
+        "footL":     { "x": 53, "y": 93 },
+        "footR":     { "x": 43, "y": 93 }
+      }
+    },
+    {
+      "duration": 300,
+      "ease": "ease-in-out",
+      "label": "Block",
+      "highlight": ["elbowL", "handL"],
+      "joints": {
+        "head":      { "x": 50, "y": 8  },
+        "neck":      { "x": 50, "y": 15 },
+        "spine":     { "x": 49, "y": 50 },
+        "shoulderL": { "x": 46, "y": 21 },
+        "shoulderR": { "x": 56, "y": 21 },
+        "elbowL":    { "x": 44, "y": 48 },
+        "elbowR":    { "x": 62, "y": 35 },
+        "handL":     { "x": 46, "y": 66 },
+        "handR":     { "x": 65, "y": 50 },
+        "hipL":      { "x": 47, "y": 52 },
+        "hipR":      { "x": 55, "y": 52 },
+        "kneeL":     { "x": 49, "y": 71 },
+        "kneeR":     { "x": 54, "y": 71 },
+        "footL":     { "x": 53, "y": 93 },
+        "footR":     { "x": 43, "y": 93 }
+      }
+    },
+    {
+      "duration": 350,
+      "ease": "ease-in",
+      "label": "Retract",
+      "joints": {
+        "head":      { "x": 50, "y": 8  },
+        "neck":      { "x": 50, "y": 15 },
+        "spine":     { "x": 49, "y": 50 },
+        "shoulderL": { "x": 46, "y": 21 },
+        "shoulderR": { "x": 56, "y": 21 },
+        "elbowL":    { "x": 54, "y": 22 },
+        "elbowR":    { "x": 64, "y": 32 },
+        "handL":     { "x": 60, "y": 12 },
+        "handR":     { "x": 72, "y": 26 },
+        "hipL":      { "x": 47, "y": 52 },
+        "hipR":      { "x": 55, "y": 52 },
+        "kneeL":     { "x": 49, "y": 71 },
+        "kneeR":     { "x": 54, "y": 71 },
+        "footL":     { "x": 53, "y": 93 },
+        "footR":     { "x": 43, "y": 93 }
+      }
+    },
+    {
+      "duration": 800,
+      "ease": "ease-in-out",
+      "label": "Return",
+      "joints": {
+        "head":      { "x": 50, "y": 8  },
+        "neck":      { "x": 50, "y": 15 },
+        "spine":     { "x": 49, "y": 50 },
+        "shoulderL": { "x": 46, "y": 21 },
+        "shoulderR": { "x": 56, "y": 21 },
+        "elbowL":    { "x": 40, "y": 35 },
+        "elbowR":    { "x": 62, "y": 35 },
+        "handL":     { "x": 37, "y": 50 },
+        "handR":     { "x": 65, "y": 50 },
+        "hipL":      { "x": 47, "y": 52 },
+        "hipR":      { "x": 55, "y": 52 },
+        "kneeL":     { "x": 49, "y": 71 },
+        "kneeR":     { "x": 54, "y": 71 },
+        "footL":     { "x": 53, "y": 93 },
+        "footR":     { "x": 43, "y": 93 }
+      }
+    }
+  ]
+}

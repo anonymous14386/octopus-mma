@@ -1,0 +1,50 @@
+{
+  "title": "Front Stance (Zenkutsu Dachi)",
+  "loop": true,
+  "frames": [
+    {
+      "duration": 2000,
+      "ease": "ease-in-out",
+      "label": "Zenkutsu Dachi",
+      "joints": {
+        "head":      { "x": 50, "y": 8  },
+        "neck":      { "x": 49, "y": 15 },
+        "spine":     { "x": 48, "y": 50 },
+        "shoulderL": { "x": 53, "y": 21 },
+        "shoulderR": { "x": 43, "y": 21 },
+        "elbowL":    { "x": 55, "y": 35 },
+        "elbowR":    { "x": 40, "y": 35 },
+        "handL":     { "x": 54, "y": 50 },
+        "handR":     { "x": 38, "y": 50 },
+        "hipL":      { "x": 51, "y": 52 },
+        "hipR":      { "x": 43, "y": 52 },
+        "kneeL":     { "x": 54, "y": 68 },
+        "kneeR":     { "x": 38, "y": 78 },
+        "footL":     { "x": 58, "y": 92 },
+        "footR":     { "x": 32, "y": 92 }
+      }
+    },
+    {
+      "duration": 2000,
+      "ease": "ease-in-out",
+      "label": "Hold",
+      "joints": {
+        "head":      { "x": 50, "y": 9  },
+        "neck":      { "x": 49, "y": 16 },
+        "spine":     { "x": 48, "y": 51 },
+        "shoulderL": { "x": 53, "y": 22 },
+        "shoulderR": { "x": 43, "y": 22 },
+        "elbowL":    { "x": 55, "y": 36 },
+        "elbowR":    { "x": 40, "y": 36 },
+        "handL":     { "x": 54, "y": 51 },
+        "handR":     { "x": 38, "y": 51 },
+        "hipL":      { "x": 51, "y": 53 },
+        "hipR":      { "x": 43, "y": 53 },
+        "kneeL":     { "x": 54, "y": 69 },
+        "kneeR":     { "x": 38, "y": 79 },
+        "footL":     { "x": 58, "y": 92 },
+        "footR":     { "x": 32, "y": 92 }
+      }
+    }
+  ]
+}
