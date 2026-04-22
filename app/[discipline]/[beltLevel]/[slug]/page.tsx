@@ -1,7 +1,8 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { BELT_COLORS, DISCIPLINE_META, type Discipline } from "@/lib/types";
-import { getTechnique, getAllTechniqueSlugs } from "@/lib/content";
+import { getTechnique, getAllTechniqueSlugs, getPoses } from "@/lib/content";
+import DiagramViewer from "@/components/technique/DiagramViewer";
 
 interface Props {
   params: { discipline: string; beltLevel: string; slug: string };
@@ -19,6 +20,8 @@ export default function TechniquePage({ params }: Props) {
 
   const technique = getTechnique(discipline, beltLevel, slug);
   if (!technique) notFound();
+
+  const poses = getPoses(discipline, beltLevel, slug);
 
   const { frontmatter, content } = technique;
   const badgeClass = BELT_COLORS[beltLevel] ?? "bg-brand-card text-white";
@@ -99,12 +102,17 @@ export default function TechniquePage({ params }: Props) {
         </section>
       )}
 
-      {/* Diagram placeholder */}
-      <section className="border border-dashed border-brand-border rounded-xl p-8 text-center bg-brand-card/50">
-        <div className="text-brand-muted text-4xl mb-3">📐</div>
-        <p className="text-brand-muted text-sm">Diagrams coming soon</p>
-        <p className="text-brand-muted/60 text-xs mt-1">{frontmatter.diagramCount ?? 0} diagram{(frontmatter.diagramCount ?? 0) !== 1 ? "s" : ""} planned</p>
-      </section>
+      {/* Diagram / animation */}
+      {poses ? (
+        <section>
+          <DiagramViewer poses={poses} />
+        </section>
+      ) : (
+        <section className="border border-dashed border-brand-border rounded-xl p-8 text-center bg-brand-card/50">
+          <div className="text-brand-muted text-4xl mb-3">📐</div>
+          <p className="text-brand-muted text-sm">Animation coming soon</p>
+        </section>
+      )}
 
       {/* Introduction */}
       {intro && (
