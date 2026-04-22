@@ -1,0 +1,36 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: #0d0d0d;
+  --foreground: #e8e8e8;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: var(--font-geist-sans), system-ui, sans-serif;
+}
+
+@layer components {
+  .belt-badge {
+    @apply inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold uppercase tracking-wider;
+  }
+
+  .technique-card {
+    @apply bg-brand-card border border-brand-border rounded-lg p-4 hover:border-brand-red/50 transition-colors cursor-pointer;
+  }
+
+  .section-heading {
+    @apply text-2xl font-bold text-white mb-1;
+  }
+
+  .section-subheading {
+    @apply text-brand-muted text-sm mb-6;
+  }
+
+  .step-number {
+    @apply flex-shrink-0 w-7 h-7 rounded-full bg-brand-red/20 border border-brand-red/40 text-brand-red text-xs font-bold flex items-center justify-center;
+  }
+}

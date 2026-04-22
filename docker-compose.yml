@@ -1,0 +1,11 @@
+services:
+  octopus-mma:
+    build: .
+    container_name: octopus_mma
+    restart: always
+    networks:
+      - web_proxy
+
+networks:
+  web_proxy:
+    external: true
