@@ -1,0 +1,50 @@
+{
+  "title": "Mount Position",
+  "loop": true,
+  "frames": [
+    {
+      "duration": 2000,
+      "ease": "ease-in-out",
+      "label": "Low Mount",
+      "joints": {
+        "head":      { "x": 50, "y": 8  },
+        "neck":      { "x": 50, "y": 15 },
+        "spine":     { "x": 50, "y": 50 },
+        "shoulderL": { "x": 44, "y": 21 },
+        "shoulderR": { "x": 57, "y": 21 },
+        "elbowL":    { "x": 34, "y": 38 },
+        "elbowR":    { "x": 67, "y": 38 },
+        "handL":     { "x": 28, "y": 54 },
+        "handR":     { "x": 73, "y": 54 },
+        "hipL":      { "x": 44, "y": 64 },
+        "hipR":      { "x": 57, "y": 64 },
+        "kneeL":     { "x": 36, "y": 82 },
+        "kneeR":     { "x": 65, "y": 82 },
+        "footL":     { "x": 32, "y": 95 },
+        "footR":     { "x": 70, "y": 95 }
+      }
+    },
+    {
+      "duration": 2000,
+      "ease": "ease-in-out",
+      "label": "Pressure Down",
+      "joints": {
+        "head":      { "x": 50, "y": 10 },
+        "neck":      { "x": 50, "y": 17 },
+        "spine":     { "x": 50, "y": 52 },
+        "shoulderL": { "x": 44, "y": 23 },
+        "shoulderR": { "x": 57, "y": 23 },
+        "elbowL":    { "x": 34, "y": 40 },
+        "elbowR":    { "x": 67, "y": 40 },
+        "handL":     { "x": 28, "y": 56 },
+        "handR":     { "x": 73, "y": 56 },
+        "hipL":      { "x": 44, "y": 65 },
+        "hipR":      { "x": 57, "y": 65 },
+        "kneeL":     { "x": 36, "y": 82 },
+        "kneeR":     { "x": 65, "y": 82 },
+        "footL":     { "x": 32, "y": 95 },
+        "footR":     { "x": 70, "y": 95 }
+      }
+    }
+  ]
+}

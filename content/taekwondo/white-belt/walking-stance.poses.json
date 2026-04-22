@@ -1,0 +1,50 @@
+{
+  "title": "Walking Stance (Ap Seogi)",
+  "loop": true,
+  "frames": [
+    {
+      "duration": 2000,
+      "ease": "ease-in-out",
+      "label": "Walking Stance",
+      "joints": {
+        "head":      { "x": 50, "y": 8  },
+        "neck":      { "x": 50, "y": 15 },
+        "spine":     { "x": 49, "y": 50 },
+        "shoulderL": { "x": 46, "y": 21 },
+        "shoulderR": { "x": 56, "y": 21 },
+        "elbowL":    { "x": 40, "y": 35 },
+        "elbowR":    { "x": 62, "y": 35 },
+        "handL":     { "x": 37, "y": 50 },
+        "handR":     { "x": 65, "y": 50 },
+        "hipL":      { "x": 47, "y": 52 },
+        "hipR":      { "x": 55, "y": 52 },
+        "kneeL":     { "x": 49, "y": 71 },
+        "kneeR":     { "x": 54, "y": 71 },
+        "footL":     { "x": 53, "y": 93 },
+        "footR":     { "x": 43, "y": 93 }
+      }
+    },
+    {
+      "duration": 2000,
+      "ease": "ease-in-out",
+      "label": "Weight Check",
+      "joints": {
+        "head":      { "x": 50, "y": 8  },
+        "neck":      { "x": 50, "y": 15 },
+        "spine":     { "x": 49, "y": 51 },
+        "shoulderL": { "x": 46, "y": 22 },
+        "shoulderR": { "x": 56, "y": 22 },
+        "elbowL":    { "x": 40, "y": 36 },
+        "elbowR":    { "x": 62, "y": 36 },
+        "handL":     { "x": 37, "y": 51 },
+        "handR":     { "x": 65, "y": 51 },
+        "hipL":      { "x": 47, "y": 53 },
+        "hipR":      { "x": 55, "y": 53 },
+        "kneeL":     { "x": 49, "y": 72 },
+        "kneeR":     { "x": 54, "y": 72 },
+        "footL":     { "x": 53, "y": 93 },
+        "footR":     { "x": 43, "y": 93 }
+      }
+    }
+  ]
+}

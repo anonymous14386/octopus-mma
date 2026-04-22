@@ -1,0 +1,117 @@
+{
+  "title": "Side Kick (Yeop Chagi)",
+  "loop": true,
+  "frames": [
+    {
+      "duration": 1200,
+      "ease": "ease-in-out",
+      "label": "Fighting Stance",
+      "joints": {
+        "head":      { "x": 50, "y": 8  },
+        "neck":      { "x": 49, "y": 15 },
+        "spine":     { "x": 48, "y": 50 },
+        "shoulderL": { "x": 54, "y": 21 },
+        "shoulderR": { "x": 42, "y": 21 },
+        "elbowL":    { "x": 60, "y": 30 },
+        "elbowR":    { "x": 36, "y": 30 },
+        "handL":     { "x": 62, "y": 21 },
+        "handR":     { "x": 39, "y": 22 },
+        "hipL":      { "x": 52, "y": 52 },
+        "hipR":      { "x": 44, "y": 52 },
+        "kneeL":     { "x": 55, "y": 70 },
+        "kneeR":     { "x": 40, "y": 70 },
+        "footL":     { "x": 60, "y": 92 },
+        "footR":     { "x": 34, "y": 92 }
+      }
+    },
+    {
+      "duration": 550,
+      "ease": "ease-out",
+      "label": "Chamber",
+      "joints": {
+        "head":      { "x": 49, "y": 8  },
+        "neck":      { "x": 48, "y": 15 },
+        "spine":     { "x": 47, "y": 50 },
+        "shoulderL": { "x": 53, "y": 21 },
+        "shoulderR": { "x": 41, "y": 21 },
+        "elbowL":    { "x": 59, "y": 30 },
+        "elbowR":    { "x": 35, "y": 30 },
+        "handL":     { "x": 61, "y": 21 },
+        "handR":     { "x": 38, "y": 22 },
+        "hipL":      { "x": 51, "y": 51 },
+        "hipR":      { "x": 43, "y": 52 },
+        "kneeL":     { "x": 57, "y": 38 },
+        "kneeR":     { "x": 37, "y": 74 },
+        "footL":     { "x": 53, "y": 50 },
+        "footR":     { "x": 28, "y": 94 }
+      }
+    },
+    {
+      "duration": 320,
+      "ease": "ease-in-out",
+      "label": "Extension",
+      "highlight": ["kneeL", "footL"],
+      "joints": {
+        "head":      { "x": 46, "y": 10 },
+        "neck":      { "x": 45, "y": 17 },
+        "spine":     { "x": 43, "y": 52 },
+        "shoulderL": { "x": 50, "y": 23 },
+        "shoulderR": { "x": 38, "y": 23 },
+        "elbowL":    { "x": 56, "y": 32 },
+        "elbowR":    { "x": 32, "y": 32 },
+        "handL":     { "x": 58, "y": 23 },
+        "handR":     { "x": 35, "y": 24 },
+        "hipL":      { "x": 48, "y": 52 },
+        "hipR":      { "x": 40, "y": 53 },
+        "kneeL":     { "x": 66, "y": 44 },
+        "kneeR":     { "x": 34, "y": 76 },
+        "footL":     { "x": 83, "y": 37 },
+        "footR":     { "x": 26, "y": 94 }
+      }
+    },
+    {
+      "duration": 350,
+      "ease": "ease-in",
+      "label": "Retract",
+      "joints": {
+        "head":      { "x": 49, "y": 8  },
+        "neck":      { "x": 48, "y": 15 },
+        "spine":     { "x": 47, "y": 50 },
+        "shoulderL": { "x": 53, "y": 21 },
+        "shoulderR": { "x": 41, "y": 21 },
+        "elbowL":    { "x": 59, "y": 30 },
+        "elbowR":    { "x": 35, "y": 30 },
+        "handL":     { "x": 61, "y": 21 },
+        "handR":     { "x": 38, "y": 22 },
+        "hipL":      { "x": 51, "y": 51 },
+        "hipR":      { "x": 43, "y": 52 },
+        "kneeL":     { "x": 57, "y": 38 },
+        "kneeR":     { "x": 37, "y": 74 },
+        "footL":     { "x": 53, "y": 50 },
+        "footR":     { "x": 28, "y": 94 }
+      }
+    },
+    {
+      "duration": 800,
+      "ease": "ease-in-out",
+      "label": "Return",
+      "joints": {
+        "head":      { "x": 50, "y": 8  },
+        "neck":      { "x": 49, "y": 15 },
+        "spine":     { "x": 48, "y": 50 },
+        "shoulderL": { "x": 54, "y": 21 },
+        "shoulderR": { "x": 42, "y": 21 },
+        "elbowL":    { "x": 60, "y": 30 },
+        "elbowR":    { "x": 36, "y": 30 },
+        "handL":     { "x": 62, "y": 21 },
+        "handR":     { "x": 39, "y": 22 },
+        "hipL":      { "x": 52, "y": 52 },
+        "hipR":      { "x": 44, "y": 52 },
+        "kneeL":     { "x": 55, "y": 70 },
+        "kneeR":     { "x": 40, "y": 70 },
+        "footL":     { "x": 60, "y": 92 },
+        "footR":     { "x": 34, "y": 92 }
+      }
+    }
+  ]
+}

@@ -1,0 +1,118 @@
+{
+  "title": "Triangle Choke",
+  "loop": true,
+  "frames": [
+    {
+      "duration": 1500,
+      "ease": "ease-in-out",
+      "label": "Guard Open",
+      "joints": {
+        "head":      { "x": 20, "y": 52 },
+        "neck":      { "x": 26, "y": 52 },
+        "spine":     { "x": 50, "y": 56 },
+        "shoulderL": { "x": 28, "y": 47 },
+        "shoulderR": { "x": 28, "y": 58 },
+        "elbowL":    { "x": 18, "y": 42 },
+        "elbowR":    { "x": 18, "y": 63 },
+        "handL":     { "x": 10, "y": 38 },
+        "handR":     { "x": 10, "y": 67 },
+        "hipL":      { "x": 62, "y": 49 },
+        "hipR":      { "x": 62, "y": 62 },
+        "kneeL":     { "x": 76, "y": 36 },
+        "kneeR":     { "x": 76, "y": 70 },
+        "footL":     { "x": 88, "y": 32 },
+        "footR":     { "x": 88, "y": 74 }
+      }
+    },
+    {
+      "duration": 600,
+      "ease": "ease-out",
+      "label": "Leg Over",
+      "joints": {
+        "head":      { "x": 20, "y": 52 },
+        "neck":      { "x": 26, "y": 52 },
+        "spine":     { "x": 50, "y": 56 },
+        "shoulderL": { "x": 28, "y": 47 },
+        "shoulderR": { "x": 28, "y": 58 },
+        "elbowL":    { "x": 18, "y": 42 },
+        "elbowR":    { "x": 18, "y": 63 },
+        "handL":     { "x": 10, "y": 38 },
+        "handR":     { "x": 10, "y": 67 },
+        "hipL":      { "x": 62, "y": 49 },
+        "hipR":      { "x": 62, "y": 62 },
+        "kneeL":     { "x": 74, "y": 38 },
+        "kneeR":     { "x": 78, "y": 68 },
+        "footL":     { "x": 76, "y": 54 },
+        "footR":     { "x": 90, "y": 72 }
+      }
+    },
+    {
+      "duration": 350,
+      "ease": "ease-in-out",
+      "label": "Lock Triangle",
+      "highlight": ["kneeL", "kneeR", "footL"],
+      "joints": {
+        "head":      { "x": 20, "y": 52 },
+        "neck":      { "x": 26, "y": 52 },
+        "spine":     { "x": 50, "y": 58 },
+        "shoulderL": { "x": 28, "y": 47 },
+        "shoulderR": { "x": 28, "y": 58 },
+        "elbowL":    { "x": 18, "y": 42 },
+        "elbowR":    { "x": 18, "y": 63 },
+        "handL":     { "x": 38, "y": 48 },
+        "handR":     { "x": 10, "y": 67 },
+        "hipL":      { "x": 64, "y": 50 },
+        "hipR":      { "x": 64, "y": 64 },
+        "kneeL":     { "x": 72, "y": 40 },
+        "kneeR":     { "x": 78, "y": 68 },
+        "footL":     { "x": 80, "y": 60 },
+        "footR":     { "x": 88, "y": 56 }
+      }
+    },
+    {
+      "duration": 400,
+      "ease": "ease-in",
+      "label": "Squeeze",
+      "highlight": ["kneeL", "kneeR", "footL"],
+      "joints": {
+        "head":      { "x": 20, "y": 52 },
+        "neck":      { "x": 26, "y": 52 },
+        "spine":     { "x": 50, "y": 59 },
+        "shoulderL": { "x": 28, "y": 47 },
+        "shoulderR": { "x": 28, "y": 58 },
+        "elbowL":    { "x": 18, "y": 42 },
+        "elbowR":    { "x": 18, "y": 63 },
+        "handL":     { "x": 40, "y": 48 },
+        "handR":     { "x": 10, "y": 67 },
+        "hipL":      { "x": 65, "y": 51 },
+        "hipR":      { "x": 65, "y": 65 },
+        "kneeL":     { "x": 70, "y": 42 },
+        "kneeR":     { "x": 76, "y": 68 },
+        "footL":     { "x": 78, "y": 60 },
+        "footR":     { "x": 86, "y": 55 }
+      }
+    },
+    {
+      "duration": 1000,
+      "ease": "ease-in-out",
+      "label": "Reset",
+      "joints": {
+        "head":      { "x": 20, "y": 52 },
+        "neck":      { "x": 26, "y": 52 },
+        "spine":     { "x": 50, "y": 56 },
+        "shoulderL": { "x": 28, "y": 47 },
+        "shoulderR": { "x": 28, "y": 58 },
+        "elbowL":    { "x": 18, "y": 42 },
+        "elbowR":    { "x": 18, "y": 63 },
+        "handL":     { "x": 10, "y": 38 },
+        "handR":     { "x": 10, "y": 67 },
+        "hipL":      { "x": 62, "y": 49 },
+        "hipR":      { "x": 62, "y": 62 },
+        "kneeL":     { "x": 76, "y": 36 },
+        "kneeR":     { "x": 76, "y": 70 },
+        "footL":     { "x": 88, "y": 32 },
+        "footR":     { "x": 88, "y": 74 }
+      }
+    }
+  ]
+}

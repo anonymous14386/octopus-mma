@@ -1,0 +1,50 @@
+{
+  "title": "Closed Guard",
+  "loop": true,
+  "frames": [
+    {
+      "duration": 2000,
+      "ease": "ease-in-out",
+      "label": "Closed Guard",
+      "joints": {
+        "head":      { "x": 22, "y": 52 },
+        "neck":      { "x": 28, "y": 52 },
+        "spine":     { "x": 50, "y": 56 },
+        "shoulderL": { "x": 30, "y": 47 },
+        "shoulderR": { "x": 30, "y": 58 },
+        "elbowL":    { "x": 20, "y": 40 },
+        "elbowR":    { "x": 20, "y": 65 },
+        "handL":     { "x": 13, "y": 36 },
+        "handR":     { "x": 13, "y": 69 },
+        "hipL":      { "x": 64, "y": 48 },
+        "hipR":      { "x": 64, "y": 60 },
+        "kneeL":     { "x": 78, "y": 38 },
+        "kneeR":     { "x": 78, "y": 68 },
+        "footL":     { "x": 88, "y": 56 },
+        "footR":     { "x": 88, "y": 56 }
+      }
+    },
+    {
+      "duration": 2000,
+      "ease": "ease-in-out",
+      "label": "Hip Active",
+      "joints": {
+        "head":      { "x": 22, "y": 52 },
+        "neck":      { "x": 28, "y": 52 },
+        "spine":     { "x": 50, "y": 58 },
+        "shoulderL": { "x": 30, "y": 47 },
+        "shoulderR": { "x": 30, "y": 58 },
+        "elbowL":    { "x": 20, "y": 40 },
+        "elbowR":    { "x": 20, "y": 65 },
+        "handL":     { "x": 13, "y": 36 },
+        "handR":     { "x": 13, "y": 69 },
+        "hipL":      { "x": 64, "y": 50 },
+        "hipR":      { "x": 64, "y": 62 },
+        "kneeL":     { "x": 76, "y": 38 },
+        "kneeR":     { "x": 76, "y": 70 },
+        "footL":     { "x": 87, "y": 56 },
+        "footR":     { "x": 87, "y": 56 }
+      }
+    }
+  ]
+}
