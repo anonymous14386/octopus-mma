@@ -1,6 +1,7 @@
 {
   "title": "Armbar (Juji Gatame)",
   "loop": true,
+  "opponentOnTop": true,
   "frames": [
     {
       "duration": 1200,
@@ -22,6 +23,23 @@
         "kneeR":     { "x": 76, "y": 68 },
         "footL":     { "x": 86, "y": 55 },
         "footR":     { "x": 86, "y": 55 }
+      },
+      "opponentJoints": {
+        "head":      { "x": 50, "y": 22 },
+        "neck":      { "x": 50, "y": 30 },
+        "spine":     { "x": 50, "y": 52 },
+        "shoulderL": { "x": 40, "y": 36 },
+        "shoulderR": { "x": 62, "y": 36 },
+        "elbowL":    { "x": 32, "y": 50 },
+        "elbowR":    { "x": 70, "y": 50 },
+        "handL":     { "x": 26, "y": 62 },
+        "handR":     { "x": 74, "y": 62 },
+        "hipL":      { "x": 43, "y": 60 },
+        "hipR":      { "x": 57, "y": 60 },
+        "kneeL":     { "x": 35, "y": 76 },
+        "kneeR":     { "x": 64, "y": 76 },
+        "footL":     { "x": 28, "y": 92 },
+        "footR":     { "x": 70, "y": 92 }
       }
     },
     {
@@ -44,6 +62,23 @@
         "kneeR":     { "x": 70, "y": 70 },
         "footL":     { "x": 56, "y": 28 },
         "footR":     { "x": 80, "y": 75 }
+      },
+      "opponentJoints": {
+        "head":      { "x": 52, "y": 22 },
+        "neck":      { "x": 50, "y": 30 },
+        "spine":     { "x": 50, "y": 52 },
+        "shoulderL": { "x": 40, "y": 36 },
+        "shoulderR": { "x": 62, "y": 36 },
+        "elbowL":    { "x": 33, "y": 49 },
+        "elbowR":    { "x": 64, "y": 48 },
+        "handL":     { "x": 28, "y": 60 },
+        "handR":     { "x": 54, "y": 52 },
+        "hipL":      { "x": 43, "y": 60 },
+        "hipR":      { "x": 57, "y": 60 },
+        "kneeL":     { "x": 35, "y": 76 },
+        "kneeR":     { "x": 64, "y": 76 },
+        "footL":     { "x": 28, "y": 92 },
+        "footR":     { "x": 70, "y": 92 }
       }
     },
     {
@@ -51,6 +86,7 @@
       "ease": "ease-in-out",
       "label": "Extend",
       "highlight": ["handL", "elbowL"],
+      "opponentHighlight": ["elbowR", "handR"],
       "joints": {
         "head":      { "x": 20, "y": 56 },
         "neck":      { "x": 26, "y": 54 },
@@ -67,6 +103,23 @@
         "kneeR":     { "x": 68, "y": 72 },
         "footL":     { "x": 54, "y": 24 },
         "footR":     { "x": 80, "y": 76 }
+      },
+      "opponentJoints": {
+        "head":      { "x": 52, "y": 22 },
+        "neck":      { "x": 50, "y": 30 },
+        "spine":     { "x": 50, "y": 52 },
+        "shoulderL": { "x": 40, "y": 36 },
+        "shoulderR": { "x": 62, "y": 36 },
+        "elbowL":    { "x": 33, "y": 49 },
+        "elbowR":    { "x": 60, "y": 46 },
+        "handL":     { "x": 28, "y": 60 },
+        "handR":     { "x": 48, "y": 52 },
+        "hipL":      { "x": 43, "y": 60 },
+        "hipR":      { "x": 57, "y": 60 },
+        "kneeL":     { "x": 35, "y": 76 },
+        "kneeR":     { "x": 64, "y": 76 },
+        "footL":     { "x": 28, "y": 92 },
+        "footR":     { "x": 70, "y": 92 }
       }
     },
     {
@@ -89,6 +142,23 @@
         "kneeR":     { "x": 70, "y": 70 },
         "footL":     { "x": 56, "y": 28 },
         "footR":     { "x": 80, "y": 75 }
+      },
+      "opponentJoints": {
+        "head":      { "x": 52, "y": 22 },
+        "neck":      { "x": 50, "y": 30 },
+        "spine":     { "x": 50, "y": 52 },
+        "shoulderL": { "x": 40, "y": 36 },
+        "shoulderR": { "x": 62, "y": 36 },
+        "elbowL":    { "x": 33, "y": 49 },
+        "elbowR":    { "x": 62, "y": 48 },
+        "handL":     { "x": 28, "y": 60 },
+        "handR":     { "x": 52, "y": 53 },
+        "hipL":      { "x": 43, "y": 60 },
+        "hipR":      { "x": 57, "y": 60 },
+        "kneeL":     { "x": 35, "y": 76 },
+        "kneeR":     { "x": 64, "y": 76 },
+        "footL":     { "x": 28, "y": 92 },
+        "footR":     { "x": 70, "y": 92 }
       }
     },
     {
@@ -111,6 +181,23 @@
         "kneeR":     { "x": 76, "y": 68 },
         "footL":     { "x": 86, "y": 55 },
         "footR":     { "x": 86, "y": 55 }
+      },
+      "opponentJoints": {
+        "head":      { "x": 50, "y": 22 },
+        "neck":      { "x": 50, "y": 30 },
+        "spine":     { "x": 50, "y": 52 },
+        "shoulderL": { "x": 40, "y": 36 },
+        "shoulderR": { "x": 62, "y": 36 },
+        "elbowL":    { "x": 32, "y": 50 },
+        "elbowR":    { "x": 70, "y": 50 },
+        "handL":     { "x": 26, "y": 62 },
+        "handR":     { "x": 74, "y": 62 },
+        "hipL":      { "x": 43, "y": 60 },
+        "hipR":      { "x": 57, "y": 60 },
+        "kneeL":     { "x": 35, "y": 76 },
+        "kneeR":     { "x": 64, "y": 76 },
+        "footL":     { "x": 28, "y": 92 },
+        "footR":     { "x": 70, "y": 92 }
       }
     }
   ]
