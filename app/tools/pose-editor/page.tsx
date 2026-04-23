@@ -44,18 +44,27 @@ function cloneData<T>(d: T): T {
 // ─── Component ───────────────────────────────────────────────────────────────
 
 export default function PoseEditorPage() {
-  const [data,     setData]     = useState<PoseData>(cloneData(DEFAULT_DATA));
-  const [fi,       setFi]       = useState(0);
-  const [dragging, setDragging] = useState<JointKey | null>(null);
-  const [nearSide, setNearSide] = useState<"L" | "R">("L");
-  const [jsonLoad, setJsonLoad] = useState("");
-  const [loadErr,  setLoadErr]  = useState("");
-  const [copied,   setCopied]   = useState(false);
+  const [data,           setData]           = useState<PoseData>(cloneData(DEFAULT_DATA));
+  const [fi,             setFi]             = useState(0);
+  const [dragging,       setDragging]       = useState<JointKey | null>(null);
+  const [nearSide,       setNearSide]       = useState<"L" | "R">("L");
+  const [editingFigure,  setEditingFigure]  = useState<"self" | "opponent">("self");
+  const [jsonLoad,       setJsonLoad]       = useState("");
+  const [loadErr,        setLoadErr]        = useState("");
+  const [copied,         setCopied]         = useState(false);
 
   const svgRef = useRef<SVGSVGElement>(null);
 
   const frame      = data.frames[fi] ?? data.frames[0];
-  const highlights = (frame?.highlight ?? []) as JointKey[];
+  const hasOpp     = frame?.opponentJoints != null;
+
+  const selfHL = (frame?.highlight         ?? []) as JointKey[];
+  const oppHL  = (frame?.opponentHighlight ?? []) as JointKey[];
+  const highlights = editingFigure === "self" ? selfHL : oppHL;
+
+  const currentJoints = editingFigure === "self"
+    ? frame?.joints
+    : (frame?.opponentJoints ?? frame?.joints);
 
   // ── Coordinate conversion ────────────────────────────────────────────────
 
@@ -75,11 +84,17 @@ export default function PoseEditorPage() {
     const pos = toSVGCoords(e.clientX, e.clientY);
     setData(prev => {
       const d = cloneData(prev);
-      if (d.frames[fi]) d.frames[fi].joints[dragging] = pos;
+      const f = d.frames[fi];
+      if (!f) return d;
+      if (editingFigure === "self") {
+        f.joints[dragging] = pos;
+      } else if (f.opponentJoints) {
+        f.opponentJoints[dragging] = pos;
+      }
       return d;
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [dragging, fi]);
+  }, [dragging, fi, editingFigure]);
 
   const onMouseUp = useCallback(() => setDragging(null), []);
 
@@ -127,18 +142,54 @@ export default function PoseEditorPage() {
   function resetFrameToNeutral() {
     setData(prev => {
       const d = cloneData(prev);
-      d.frames[fi].joints = cloneData(NEUTRAL_STANCE);
+      if (editingFigure === "self") {
+        d.frames[fi].joints = cloneData(NEUTRAL_STANCE);
+      } else if (d.frames[fi].opponentJoints) {
+        d.frames[fi].opponentJoints = cloneData(NEUTRAL_STANCE);
+      }
       return d;
     });
+  }
+
+  // ── Opponent management ──────────────────────────────────────────────────
+
+  function addOpponent() {
+    setData(prev => {
+      const d = cloneData(prev);
+      for (const f of d.frames) {
+        f.opponentJoints = cloneData(NEUTRAL_STANCE);
+      }
+      return d;
+    });
+    setEditingFigure("opponent");
+  }
+
+  function removeOpponent() {
+    setData(prev => {
+      const d = cloneData(prev);
+      for (const f of d.frames) {
+        delete f.opponentJoints;
+        delete f.opponentHighlight;
+      }
+      return d;
+    });
+    setEditingFigure("self");
   }
 
   // ── Highlight toggle ─────────────────────────────────────────────────────
 
   function toggleHighlight(joint: JointKey) {
-    const cur = [...highlights];
-    const idx = cur.indexOf(joint);
-    if (idx >= 0) cur.splice(idx, 1); else cur.push(joint);
-    updateFrame("highlight", cur as JointKey[]);
+    if (editingFigure === "self") {
+      const cur = [...selfHL];
+      const idx = cur.indexOf(joint);
+      if (idx >= 0) cur.splice(idx, 1); else cur.push(joint);
+      updateFrame("highlight", cur as JointKey[]);
+    } else {
+      const cur = [...oppHL];
+      const idx = cur.indexOf(joint);
+      if (idx >= 0) cur.splice(idx, 1); else cur.push(joint);
+      updateFrame("opponentHighlight", cur as JointKey[]);
+    }
   }
 
   // ── JSON I/O ─────────────────────────────────────────────────────────────
@@ -157,6 +208,7 @@ export default function PoseEditorPage() {
         throw new Error("frames array is empty or missing");
       setData(parsed);
       setFi(0);
+      setEditingFigure("self");
       setJsonLoad("");
     } catch (e) {
       setLoadErr((e as Error).message);
@@ -191,6 +243,17 @@ export default function PoseEditorPage() {
             Loop
           </label>
 
+          {hasOpp && (
+            <label className="flex items-center gap-2 text-sm cursor-pointer select-none">
+              <input
+                type="checkbox"
+                checked={data.opponentOnTop ?? false}
+                onChange={e => setData(prev => ({ ...prev, opponentOnTop: e.target.checked }))}
+              />
+              Opponent on top
+            </label>
+          )}
+
           <label className="flex items-center gap-2 text-sm">
             <span className="text-[#888]">Facing:</span>
             <select
@@ -202,6 +265,48 @@ export default function PoseEditorPage() {
               <option value="R">Left (R near)</option>
             </select>
           </label>
+        </div>
+
+        {/* ── Figure toggle ── */}
+        <div className="flex items-center gap-2">
+          <button
+            onClick={() => setEditingFigure("self")}
+            className={`px-3 py-1 rounded text-sm transition-colors ${
+              editingFigure === "self"
+                ? "bg-[#e74c3c] text-white font-medium"
+                : "bg-[#1e1e1e] border border-[#333] text-[#888] hover:text-white"
+            }`}
+          >
+            Self (white)
+          </button>
+
+          {hasOpp ? (
+            <>
+              <button
+                onClick={() => setEditingFigure("opponent")}
+                className={`px-3 py-1 rounded text-sm transition-colors ${
+                  editingFigure === "opponent"
+                    ? "bg-[#2c6098] text-white font-medium"
+                    : "bg-[#1e1e1e] border border-[#333] text-[#888] hover:text-white"
+                }`}
+              >
+                Opponent (blue)
+              </button>
+              <button
+                onClick={removeOpponent}
+                className="px-3 py-1 rounded text-sm bg-[#1e1e1e] border border-[#333] text-[#888] hover:text-red-400 transition-colors"
+              >
+                Remove opponent
+              </button>
+            </>
+          ) : (
+            <button
+              onClick={addOpponent}
+              className="px-3 py-1 rounded text-sm bg-[#1e1e1e] border border-[#333] text-[#888] hover:text-[#5090c8] transition-colors"
+            >
+              + Add opponent
+            </button>
+          )}
         </div>
 
         {/* ── Frame tabs ── */}
@@ -222,7 +327,6 @@ export default function PoseEditorPage() {
 
           <button
             onClick={duplicateFrame}
-            title="Duplicate current frame and insert after"
             className="px-3 py-1 rounded text-sm bg-[#1e1e1e] border border-[#333] text-[#888] hover:text-white transition-colors"
           >
             + Dup
@@ -231,7 +335,6 @@ export default function PoseEditorPage() {
           {data.frames.length > 1 && (
             <button
               onClick={deleteFrame}
-              title="Delete current frame"
               className="px-3 py-1 rounded text-sm bg-[#1e1e1e] border border-[#333] text-[#888] hover:text-red-400 transition-colors"
             >
               Del
@@ -245,10 +348,10 @@ export default function PoseEditorPage() {
           {/* ── Left: Joint list ── */}
           <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg p-3 flex flex-col gap-1">
             <p className="text-[10px] text-[#555] uppercase tracking-widest mb-1">
-              Joints — click to highlight
+              {editingFigure === "self" ? "Self joints" : "Opponent joints"} — click to highlight
             </p>
             {ALL_JOINTS.map(joint => {
-              const pos  = frame?.joints[joint];
+              const pos  = currentJoints?.[joint];
               const isHL = highlights.includes(joint);
               return (
                 <button
@@ -256,7 +359,9 @@ export default function PoseEditorPage() {
                   onClick={() => toggleHighlight(joint)}
                   className={`flex items-center justify-between px-2 py-0.5 rounded text-left text-[11px] font-mono transition-colors ${
                     isHL
-                      ? "bg-red-950/50 text-red-400"
+                      ? editingFigure === "self"
+                        ? "bg-red-950/50 text-red-400"
+                        : "bg-blue-950/50 text-blue-400"
                       : "text-[#999] hover:bg-[#222] hover:text-white"
                   }`}
                 >
@@ -278,15 +383,19 @@ export default function PoseEditorPage() {
                 className="relative mx-auto select-none"
                 style={{ width: "100%", maxWidth: 380, aspectRatio: "100 / 110" }}
               >
-                {/* Stick figure (pointer-events disabled so overlay handles mouse) */}
+                {/* Both figures (pointer-events disabled so overlay handles mouse) */}
                 <StickFigure
                   joints={frame?.joints ?? NEUTRAL_STANCE}
                   nearSide={nearSide}
-                  highlightJoints={highlights}
+                  highlightJoints={selfHL}
+                  opponentJoints={frame?.opponentJoints}
+                  opponentNearSide="R"
+                  opponentHighlight={oppHL}
+                  opponentOnTop={data.opponentOnTop}
                   className="absolute inset-0 w-full h-full pointer-events-none"
                 />
 
-                {/* Drag-handle overlay */}
+                {/* Drag-handle overlay for the currently-edited figure */}
                 <svg
                   ref={svgRef}
                   viewBox="0 0 100 110"
@@ -294,27 +403,27 @@ export default function PoseEditorPage() {
                   style={{ cursor: dragging ? "grabbing" : "default" }}
                 >
                   {ALL_JOINTS.map(joint => {
-                    const pos  = frame?.joints[joint];
+                    const pos  = currentJoints?.[joint];
                     if (!pos) return null;
                     const isHL = highlights.includes(joint);
+                    const color = editingFigure === "self"
+                      ? (isHL ? "rgba(231,76,60,0.6)" : "rgba(255,255,255,0.2)")
+                      : (isHL ? "rgba(231,76,60,0.6)" : "rgba(80,144,200,0.3)");
+                    const strokeColor = editingFigure === "self"
+                      ? (isHL ? "#e74c3c" : "rgba(255,255,255,0.55)")
+                      : (isHL ? "#e74c3c" : "rgba(80,144,200,0.8)");
                     return (
                       <g key={joint}>
-                        {/* Larger invisible hit area */}
                         <circle
-                          cx={pos.x}
-                          cy={pos.y}
-                          r={6}
+                          cx={pos.x} cy={pos.y} r={6}
                           fill="transparent"
                           style={{ cursor: "grab" }}
                           onMouseDown={e => { e.preventDefault(); setDragging(joint); }}
                         />
-                        {/* Visible handle */}
                         <circle
-                          cx={pos.x}
-                          cy={pos.y}
-                          r={2.8}
-                          fill={isHL ? "rgba(231,76,60,0.6)" : "rgba(255,255,255,0.2)"}
-                          stroke={isHL ? "#e74c3c" : "rgba(255,255,255,0.55)"}
+                          cx={pos.x} cy={pos.y} r={2.8}
+                          fill={color}
+                          stroke={strokeColor}
                           strokeWidth={0.7}
                           style={{ pointerEvents: "none" }}
                         />
@@ -325,7 +434,7 @@ export default function PoseEditorPage() {
               </div>
 
               <p className="text-center text-[10px] text-[#444] py-2">
-                Drag white dots to move joints · Click joint name to toggle red highlight
+                Drag dots to move joints · Click joint name to toggle highlight
               </p>
             </div>
 
@@ -343,9 +452,7 @@ export default function PoseEditorPage() {
               <label className="flex flex-col gap-1">
                 <span className="text-[10px] text-[#555] uppercase tracking-wider">Duration (ms)</span>
                 <input
-                  type="number"
-                  min={50}
-                  step={50}
+                  type="number" min={50} step={50}
                   value={frame?.duration ?? 1000}
                   onChange={e => updateFrame("duration", Number(e.target.value))}
                   className="bg-[#111] border border-[#333] rounded px-2 py-1 text-sm"
@@ -368,7 +475,7 @@ export default function PoseEditorPage() {
                   onClick={resetFrameToNeutral}
                   className="px-3 py-1.5 rounded text-xs bg-[#282828] hover:bg-[#333] text-[#888] hover:text-white transition-colors"
                 >
-                  Reset to neutral
+                  Reset {editingFigure} to neutral
                 </button>
               </div>
             </div>
@@ -377,7 +484,6 @@ export default function PoseEditorPage() {
           {/* ── Right: JSON output + load ── */}
           <div className="flex flex-col gap-3">
 
-            {/* Output */}
             <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg p-3 flex flex-col gap-2 flex-1">
               <div className="flex items-center justify-between">
                 <span className="text-[10px] text-[#555] uppercase tracking-wider">JSON Output</span>
@@ -397,7 +503,6 @@ export default function PoseEditorPage() {
               </pre>
             </div>
 
-            {/* Load */}
             <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg p-3 flex flex-col gap-2">
               <span className="text-[10px] text-[#555] uppercase tracking-wider">Load JSON</span>
               <textarea
@@ -406,9 +511,7 @@ export default function PoseEditorPage() {
                 placeholder="Paste .poses.json content here…"
                 className="bg-[#0d0d0d] border border-[#333] rounded px-2 py-2 text-[10px] font-mono text-[#888] h-28 resize-none placeholder:text-[#444]"
               />
-              {loadErr && (
-                <p className="text-[10px] text-red-400 font-mono">{loadErr}</p>
-              )}
+              {loadErr && <p className="text-[10px] text-red-400 font-mono">{loadErr}</p>}
               <button
                 onClick={loadJSON}
                 disabled={!jsonLoad.trim()}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback, useMemo } from "react";
-import { type JointSet, type PoseData, type EaseFn, NEUTRAL_STANCE } from "@/lib/poses";
+import { type JointSet, type JointKey, type PoseData, type EaseFn, NEUTRAL_STANCE } from "@/lib/poses";
 
 // ─── Math helpers ────────────────────────────────────────────────────────────
 
@@ -9,11 +9,7 @@ function lerp(a: number, b: number, t: number) {
   return a + (b - a) * t;
 }
 
-function lerpPoint(
-  a: { x: number; y: number },
-  b: { x: number; y: number },
-  t: number
-) {
+function lerpPoint(a: { x: number; y: number }, b: { x: number; y: number }, t: number) {
   return { x: lerp(a.x, b.x, t), y: lerp(a.y, b.y, t) };
 }
 
@@ -35,38 +31,41 @@ function applyEase(t: number, fn: EaseFn = "ease-in-out"): number {
 // ─── Public API ──────────────────────────────────────────────────────────────
 
 export interface PoseAnimState {
-  joints:      JointSet;
-  frameIndex:  number;
-  frameLabel:  string;
-  isPlaying:   boolean;
-  play:        () => void;
-  pause:       () => void;
-  goToFrame:   (i: number) => void;
-  speed:       number;
-  setSpeed:    (s: number) => void;
-  totalFrames: number;
+  joints:            JointSet;
+  opponentJoints?:   JointSet;
+  highlightJoints:   JointKey[];
+  opponentHighlight: JointKey[];
+  frameIndex:        number;
+  frameLabel:        string;
+  isPlaying:         boolean;
+  play:              () => void;
+  pause:             () => void;
+  goToFrame:         (i: number) => void;
+  speed:             number;
+  setSpeed:          (s: number) => void;
+  totalFrames:       number;
 }
 
 // ─── Hook ────────────────────────────────────────────────────────────────────
 
 export function usePoseAnimation(data: PoseData): PoseAnimState {
   const frames = data.frames;
+  const hasOpponent = useMemo(() => frames.some(f => f.opponentJoints != null), [frames]);
 
-  const [joints,     setJoints]     = useState<JointSet>(frames[0]?.joints ?? NEUTRAL_STANCE);
-  const [frameIndex, setFrameIndex] = useState(0);
-  const [isPlaying,  setIsPlaying]  = useState(true);
-  const [speed,      setSpeed]      = useState(1);
+  const [joints,         setJoints]         = useState<JointSet>(frames[0]?.joints ?? NEUTRAL_STANCE);
+  const [opponentJoints, setOpponentJoints] = useState<JointSet | undefined>(frames[0]?.opponentJoints);
+  const [frameIndex,     setFrameIndex]     = useState(0);
+  const [isPlaying,      setIsPlaying]      = useState(true);
+  const [speed,          setSpeed]          = useState(1);
 
-  // Mutable refs for RAF loop (avoids stale closure issues)
-  const rafRef          = useRef<number | null>(null);
-  const elapsedRef      = useRef(0);           // accumulated ms (at current speed)
-  const lastTsRef       = useRef<number | null>(null);
-  const playingRef      = useRef(true);
-  const speedRef        = useRef(1);
+  const rafRef      = useRef<number | null>(null);
+  const elapsedRef  = useRef(0);
+  const lastTsRef   = useRef<number | null>(null);
+  const playingRef  = useRef(true);
+  const speedRef    = useRef(1);
 
   useEffect(() => { speedRef.current = speed; }, [speed]);
 
-  // Pre-compute cumulative frame start times
   const { frameStarts, totalDuration } = useMemo(() => {
     const starts: number[] = [];
     let acc = 0;
@@ -74,7 +73,6 @@ export function usePoseAnimation(data: PoseData): PoseAnimState {
     return { frameStarts: starts, totalDuration: acc };
   }, [frames]);
 
-  // Given an elapsed time, return interpolated joints + frame index
   const getStateAt = useCallback((elapsed: number) => {
     const total = totalDuration;
     const t = total > 0
@@ -86,34 +84,34 @@ export function usePoseAnimation(data: PoseData): PoseAnimState {
       if (t < frameStarts[i] + frames[i].duration) { fi = i; break; }
     }
 
-    const frameT  = t - frameStarts[fi];
-    const dur     = frames[fi].duration;
-    const rawP    = dur > 0 ? Math.min(frameT / dur, 1) : 1;
-    const easedP  = applyEase(rawP, frames[fi].ease);
+    const frameT = t - frameStarts[fi];
+    const dur    = frames[fi].duration;
+    const rawP   = dur > 0 ? Math.min(frameT / dur, 1) : 1;
+    const easedP = applyEase(rawP, frames[fi].ease);
+    const nextFi = (data.loop && fi === frames.length - 1) ? 0 : Math.min(fi + 1, frames.length - 1);
 
-    // On the last frame, loop transitions back to first; otherwise go to next
-    const nextFi  = (data.loop && fi === frames.length - 1) ? 0 : Math.min(fi + 1, frames.length - 1);
+    const oppA = frames[fi].opponentJoints    ?? frames[fi].joints;
+    const oppB = frames[nextFi].opponentJoints ?? frames[nextFi].joints;
 
     return {
-      joints:     lerpJoints(frames[fi].joints, frames[nextFi].joints, easedP),
-      frameIndex: fi,
+      joints:         lerpJoints(frames[fi].joints, frames[nextFi].joints, easedP),
+      opponentJoints: hasOpponent ? lerpJoints(oppA, oppB, easedP) : undefined,
+      frameIndex:     fi,
     };
-  }, [data.loop, frames, frameStarts, totalDuration]);
+  }, [data.loop, frames, frameStarts, totalDuration, hasOpponent]);
 
-  // RAF tick
   useEffect(() => {
     function tick(ts: number) {
       if (!playingRef.current) return;
-
       if (lastTsRef.current !== null) {
         elapsedRef.current += (ts - lastTsRef.current) * speedRef.current;
       }
       lastTsRef.current = ts;
 
-      // Stop when finished (non-looping)
       if (!data.loop && elapsedRef.current >= totalDuration) {
         const s = getStateAt(totalDuration - 1);
         setJoints(s.joints);
+        setOpponentJoints(s.opponentJoints);
         setFrameIndex(s.frameIndex);
         playingRef.current = false;
         setIsPlaying(false);
@@ -122,6 +120,7 @@ export function usePoseAnimation(data: PoseData): PoseAnimState {
 
       const s = getStateAt(elapsedRef.current);
       setJoints(s.joints);
+      setOpponentJoints(s.opponentJoints);
       setFrameIndex(s.frameIndex);
       rafRef.current = requestAnimationFrame(tick);
     }
@@ -154,13 +153,16 @@ export function usePoseAnimation(data: PoseData): PoseAnimState {
     elapsedRef.current = frameStarts[clamped] ?? 0;
     const s = getStateAt(elapsedRef.current);
     setJoints(s.joints);
+    setOpponentJoints(s.opponentJoints);
     setFrameIndex(s.frameIndex);
-    // Restart timing from here so continuing play is seamless
     lastTsRef.current = null;
   }, [frames.length, frameStarts, getStateAt]);
 
   return {
     joints,
+    opponentJoints,
+    highlightJoints:   frames[frameIndex]?.highlight         ?? [],
+    opponentHighlight: frames[frameIndex]?.opponentHighlight ?? [],
     frameIndex,
     frameLabel:  frames[frameIndex]?.label ?? `Frame ${frameIndex + 1}`,
     isPlaying,

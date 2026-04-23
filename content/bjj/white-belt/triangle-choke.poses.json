@@ -1,6 +1,7 @@
 {
   "title": "Triangle Choke",
   "loop": true,
+  "opponentOnTop": true,
   "frames": [
     {
       "duration": 1500,
@@ -22,6 +23,23 @@
         "kneeR":     { "x": 76, "y": 70 },
         "footL":     { "x": 88, "y": 32 },
         "footR":     { "x": 88, "y": 74 }
+      },
+      "opponentJoints": {
+        "head":      { "x": 50, "y": 20 },
+        "neck":      { "x": 50, "y": 28 },
+        "spine":     { "x": 50, "y": 50 },
+        "shoulderL": { "x": 40, "y": 34 },
+        "shoulderR": { "x": 62, "y": 34 },
+        "elbowL":    { "x": 32, "y": 48 },
+        "elbowR":    { "x": 70, "y": 48 },
+        "handL":     { "x": 26, "y": 60 },
+        "handR":     { "x": 74, "y": 60 },
+        "hipL":      { "x": 43, "y": 58 },
+        "hipR":      { "x": 57, "y": 58 },
+        "kneeL":     { "x": 35, "y": 75 },
+        "kneeR":     { "x": 64, "y": 75 },
+        "footL":     { "x": 28, "y": 92 },
+        "footR":     { "x": 70, "y": 92 }
       }
     },
     {
@@ -44,6 +62,23 @@
         "kneeR":     { "x": 78, "y": 68 },
         "footL":     { "x": 76, "y": 54 },
         "footR":     { "x": 90, "y": 72 }
+      },
+      "opponentJoints": {
+        "head":      { "x": 50, "y": 20 },
+        "neck":      { "x": 50, "y": 28 },
+        "spine":     { "x": 50, "y": 50 },
+        "shoulderL": { "x": 40, "y": 34 },
+        "shoulderR": { "x": 62, "y": 34 },
+        "elbowL":    { "x": 32, "y": 48 },
+        "elbowR":    { "x": 70, "y": 48 },
+        "handL":     { "x": 26, "y": 60 },
+        "handR":     { "x": 74, "y": 60 },
+        "hipL":      { "x": 43, "y": 58 },
+        "hipR":      { "x": 57, "y": 58 },
+        "kneeL":     { "x": 35, "y": 75 },
+        "kneeR":     { "x": 64, "y": 75 },
+        "footL":     { "x": 28, "y": 92 },
+        "footR":     { "x": 70, "y": 92 }
       }
     },
     {
@@ -51,6 +86,7 @@
       "ease": "ease-in-out",
       "label": "Lock Triangle",
       "highlight": ["kneeL", "kneeR", "footL"],
+      "opponentHighlight": ["neck", "shoulderR"],
       "joints": {
         "head":      { "x": 20, "y": 52 },
         "neck":      { "x": 26, "y": 52 },
@@ -67,6 +103,23 @@
         "kneeR":     { "x": 78, "y": 68 },
         "footL":     { "x": 80, "y": 60 },
         "footR":     { "x": 88, "y": 56 }
+      },
+      "opponentJoints": {
+        "head":      { "x": 50, "y": 20 },
+        "neck":      { "x": 50, "y": 28 },
+        "spine":     { "x": 50, "y": 50 },
+        "shoulderL": { "x": 40, "y": 34 },
+        "shoulderR": { "x": 62, "y": 34 },
+        "elbowL":    { "x": 32, "y": 48 },
+        "elbowR":    { "x": 66, "y": 44 },
+        "handL":     { "x": 26, "y": 60 },
+        "handR":     { "x": 60, "y": 48 },
+        "hipL":      { "x": 43, "y": 58 },
+        "hipR":      { "x": 57, "y": 58 },
+        "kneeL":     { "x": 35, "y": 75 },
+        "kneeR":     { "x": 64, "y": 75 },
+        "footL":     { "x": 28, "y": 92 },
+        "footR":     { "x": 70, "y": 92 }
       }
     },
     {
@@ -74,6 +127,7 @@
       "ease": "ease-in",
       "label": "Squeeze",
       "highlight": ["kneeL", "kneeR", "footL"],
+      "opponentHighlight": ["neck", "shoulderR"],
       "joints": {
         "head":      { "x": 20, "y": 52 },
         "neck":      { "x": 26, "y": 52 },
@@ -90,6 +144,23 @@
         "kneeR":     { "x": 76, "y": 68 },
         "footL":     { "x": 78, "y": 60 },
         "footR":     { "x": 86, "y": 55 }
+      },
+      "opponentJoints": {
+        "head":      { "x": 50, "y": 22 },
+        "neck":      { "x": 50, "y": 30 },
+        "spine":     { "x": 50, "y": 52 },
+        "shoulderL": { "x": 40, "y": 36 },
+        "shoulderR": { "x": 62, "y": 36 },
+        "elbowL":    { "x": 32, "y": 50 },
+        "elbowR":    { "x": 64, "y": 44 },
+        "handL":     { "x": 26, "y": 62 },
+        "handR":     { "x": 58, "y": 48 },
+        "hipL":      { "x": 43, "y": 60 },
+        "hipR":      { "x": 57, "y": 60 },
+        "kneeL":     { "x": 35, "y": 76 },
+        "kneeR":     { "x": 64, "y": 76 },
+        "footL":     { "x": 28, "y": 92 },
+        "footR":     { "x": 70, "y": 92 }
       }
     },
     {
@@ -112,6 +183,23 @@
         "kneeR":     { "x": 76, "y": 70 },
         "footL":     { "x": 88, "y": 32 },
         "footR":     { "x": 88, "y": 74 }
+      },
+      "opponentJoints": {
+        "head":      { "x": 50, "y": 20 },
+        "neck":      { "x": 50, "y": 28 },
+        "spine":     { "x": 50, "y": 50 },
+        "shoulderL": { "x": 40, "y": 34 },
+        "shoulderR": { "x": 62, "y": 34 },
+        "elbowL":    { "x": 32, "y": 48 },
+        "elbowR":    { "x": 70, "y": 48 },
+        "handL":     { "x": 26, "y": 60 },
+        "handR":     { "x": 74, "y": 60 },
+        "hipL":      { "x": 43, "y": 58 },
+        "hipR":      { "x": 57, "y": 58 },
+        "kneeL":     { "x": 35, "y": 75 },
+        "kneeR":     { "x": 64, "y": 75 },
+        "footL":     { "x": 28, "y": 92 },
+        "footR":     { "x": 70, "y": 92 }
       }
     }
   ]

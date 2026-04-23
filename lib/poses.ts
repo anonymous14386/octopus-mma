@@ -9,7 +9,7 @@ export interface Point {
 export interface JointSet {
   head:      Point;
   neck:      Point;
-  spine:     Point; // bottom of spine / hip center
+  spine:     Point; // bottom of spine / hip centre
   shoulderL: Point;
   shoulderR: Point;
   elbowL:    Point;
@@ -29,18 +29,20 @@ export type JointKey = keyof JointSet;
 export type EaseFn = "linear" | "ease-in" | "ease-out" | "ease-in-out";
 
 export interface PoseFrame {
-  duration:   number;    // ms for this frame
-  ease?:      EaseFn;
-  label?:     string;    // shown in viewer controls
-  joints:     JointSet;
-  highlight?: JointKey[]; // joints to colour red (striking limb, target area, etc.)
+  duration:           number;    // ms for this frame
+  ease?:              EaseFn;
+  label?:             string;    // shown in viewer controls
+  joints:             JointSet;
+  highlight?:         JointKey[];
+  opponentJoints?:    JointSet;  // second figure (grappling / partner techniques)
+  opponentHighlight?: JointKey[];
 }
 
 export interface PoseData {
-  title:   string;
-  loop?:   boolean;
-  frames:  PoseFrame[];
-  framesB?: PoseFrame[]; // optional second figure for partner techniques
+  title:          string;
+  loop?:          boolean;
+  frames:         PoseFrame[];
+  opponentOnTop?: boolean; // render opponent in front of self (guard / bottom techniques)
 }
 
 // ─── Reference poses ────────────────────────────────────────────────────────
@@ -61,4 +63,23 @@ export const NEUTRAL_STANCE: JointSet = {
   kneeR:     { x: 56, y: 72 },
   footL:     { x: 42, y: 94 },
   footR:     { x: 58, y: 94 },
+};
+
+// Flat-on-back pose used as a starting point for grappling opponents
+export const FLAT_ON_BACK: JointSet = {
+  head:      { x: 18, y: 70 },
+  neck:      { x: 26, y: 70 },
+  spine:     { x: 60, y: 73 },
+  shoulderL: { x: 26, y: 66 },
+  shoulderR: { x: 28, y: 76 },
+  elbowL:    { x: 14, y: 62 },
+  elbowR:    { x: 16, y: 82 },
+  handL:     { x:  8, y: 58 },
+  handR:     { x: 10, y: 86 },
+  hipL:      { x: 72, y: 68 },
+  hipR:      { x: 74, y: 76 },
+  kneeL:     { x: 83, y: 65 },
+  kneeR:     { x: 85, y: 79 },
+  footL:     { x: 92, y: 63 },
+  footR:     { x: 93, y: 81 },
 };
