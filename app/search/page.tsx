@@ -14,12 +14,7 @@ export default function SearchPage() {
     .map(({ discipline, beltLevel, slug }) => {
       const doc = getTechnique(discipline as Discipline, beltLevel, slug);
       if (!doc) return null;
-      return {
-        ...doc.frontmatter,
-        discipline,
-        beltLevel,
-        slug,
-      } satisfies SearchEntry;
+      return doc.frontmatter;
     })
     .filter((e): e is SearchEntry => e !== null);
 
