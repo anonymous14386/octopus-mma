@@ -1,6 +1,6 @@
 "use client";
 
-import type { JointSet, JointKey } from "@/lib/poses";
+import type { JointSet, JointKey, HandShape } from "@/lib/poses";
 
 // ── Palette types ─────────────────────────────────────────────────────────────
 
@@ -19,14 +19,16 @@ const OPP:  Palette = { near: "#5090c8", far: "#1a3d6a", ctr: "#2c6098", hl: "#e
 // ── Props ─────────────────────────────────────────────────────────────────────
 
 interface Props {
-  joints:             JointSet;
-  nearSide?:          "L" | "R";
-  highlightJoints?:   JointKey[];
-  opponentJoints?:    JointSet;
-  opponentNearSide?:  "L" | "R";
-  opponentHighlight?: JointKey[];
-  opponentOnTop?:     boolean;  // render opponent in front of self
-  className?:         string;
+  joints:              JointSet;
+  nearSide?:           "L" | "R";
+  highlightJoints?:    JointKey[];
+  handShape?:          Partial<Record<"handL" | "handR", HandShape>>;
+  opponentJoints?:     JointSet;
+  opponentNearSide?:   "L" | "R";
+  opponentHighlight?:  JointKey[];
+  opponentHandShape?:  Partial<Record<"handL" | "handR", HandShape>>;
+  opponentOnTop?:      boolean;
+  className?:          string;
 }
 
 // ── Figure renderer ───────────────────────────────────────────────────────────
@@ -36,11 +38,13 @@ function Figure({
   pal,
   hl,
   faceRight,
+  handShapes,
 }: {
   jt: JointSet;
   pal: Palette;
   hl: Set<JointKey>;
   faceRight: boolean;
+  handShapes?: Partial<Record<"handL" | "handR", HandShape>>;
 }) {
   // When facing right, L side = near; when facing left, R side = near.
   const ns = faceRight ? "L" : "R"; // near-side suffix
@@ -62,14 +66,27 @@ function Figure({
   const eyeX  = jt.head.x + (faceRight ?  3 : -3);
   const noseX = jt.head.x + (faceRight ?  7 : -7);
 
-  // Oriented shape helpers — angle is direction of the limb from parent→child
+  // Oriented shape helpers
   const ang = (parent: {x:number;y:number}, child: {x:number;y:number}) =>
     Math.atan2(child.y - parent.y, child.x - parent.x) * 180 / Math.PI;
+  const angRad = (parent: {x:number;y:number}, child: {x:number;y:number}) =>
+    Math.atan2(child.y - parent.y, child.x - parent.x);
 
   const nHandAng = ang(nP.elbow, nP.hand);
   const fHandAng = ang(fP.elbow, fP.hand);
-  const nFootAng = ang(nP.knee,  nP.foot);
-  const fFootAng = ang(fP.knee,  fP.foot);
+
+  // Foot: if shin is mostly vertical (standing), rotate 90° so foot lies flat.
+  // If shin is mostly horizontal (kicking), keep inline with shin.
+  const nShinRad = angRad(nP.knee, nP.foot);
+  const fShinRad = angRad(fP.knee, fP.foot);
+  const nFootAng = ang(nP.knee, nP.foot) + (Math.abs(Math.sin(nShinRad)) > 0.6 ? 90 : 0);
+  const fFootAng = ang(fP.knee, fP.foot) + (Math.abs(Math.sin(fShinRad)) > 0.6 ? 90 : 0);
+
+  // Hand shape per side
+  const nsKey = `hand${ns}` as "handL" | "handR";
+  const fsKey = `hand${fs}` as "handL" | "handR";
+  const nHandOpen = handShapes?.[nsKey] === "open";
+  const fHandOpen = handShapes?.[fsKey] === "open";
 
   return (
     <>
@@ -90,13 +107,15 @@ function Figure({
         stroke={fc(["knee","foot"])} strokeWidth={5.5} strokeLinecap="round" />
       <circle cx={fP.elbow.x} cy={fP.elbow.y} r={3} fill={fc(["elbow"])} />
       <circle cx={fP.knee.x}  cy={fP.knee.y}  r={4} fill={fc(["knee"])} />
-      {/* Far hand */}
-      <g transform={`translate(${fP.hand.x},${fP.hand.y}) rotate(${fHandAng})`}>
-        <rect x={1} y={-2} width={6} height={4} rx={1.5} fill={fc(["hand"])} opacity={0.85} />
+      {/* Far hand — fist: compact square / open: thin blade perpendicular to forearm */}
+      <g transform={`translate(${fP.hand.x},${fP.hand.y}) rotate(${fHandOpen ? fHandAng + 90 : fHandAng})`} opacity={0.85}>
+        {fHandOpen
+          ? <rect x={-6} y={-1}   width={12} height={2}   rx={0.8} fill={fc(["hand"])} />
+          : <rect x={1}  y={-2}   width={5}  height={4}   rx={1.8} fill={fc(["hand"])} />}
       </g>
       {/* Far foot */}
-      <g transform={`translate(${fP.foot.x},${fP.foot.y}) rotate(${fFootAng})`}>
-        <rect x={1} y={-3} width={8} height={5.5} rx={2} fill={fc(["foot","knee"])} opacity={0.85} />
+      <g transform={`translate(${fP.foot.x},${fP.foot.y}) rotate(${fFootAng})`} opacity={0.85}>
+        <rect x={-3} y={-2.5} width={9} height={5} rx={2} fill={fc(["foot","knee"])} />
       </g>
 
       {/* Torso / centre mass */}
@@ -118,13 +137,15 @@ function Figure({
         stroke={nc(["knee","foot"])} strokeWidth={7} strokeLinecap="round" />
       <circle cx={nP.elbow.x} cy={nP.elbow.y} r={4} fill={nc(["elbow"])} />
       <circle cx={nP.knee.x}  cy={nP.knee.y}  r={5} fill={nc(["knee"])} />
-      {/* Near hand */}
-      <g transform={`translate(${nP.hand.x},${nP.hand.y}) rotate(${nHandAng})`}>
-        <rect x={1} y={-2.5} width={7} height={5} rx={2} fill={nc(["hand"])} />
+      {/* Near hand — fist: compact square / open: thin blade perpendicular to forearm */}
+      <g transform={`translate(${nP.hand.x},${nP.hand.y}) rotate(${nHandOpen ? nHandAng + 90 : nHandAng})`}>
+        {nHandOpen
+          ? <rect x={-7} y={-1.2} width={14} height={2.4} rx={1}   fill={nc(["hand"])} />
+          : <rect x={1}  y={-2.8} width={6}  height={5.5} rx={2.2} fill={nc(["hand"])} />}
       </g>
       {/* Near foot */}
       <g transform={`translate(${nP.foot.x},${nP.foot.y}) rotate(${nFootAng})`}>
-        <rect x={1} y={-3.5} width={9} height={7} rx={2.5} fill={nc(["foot","knee"])} />
+        <rect x={-3} y={-3} width={11} height={6} rx={2.5} fill={nc(["foot","knee"])} />
       </g>
 
       {/* Neck */}
@@ -146,9 +167,11 @@ export default function StickFigure({
   joints,
   nearSide = "L",
   highlightJoints = [],
+  handShape,
   opponentJoints,
   opponentNearSide = "R",
   opponentHighlight = [],
+  opponentHandShape,
   opponentOnTop = false,
   className,
 }: Props) {
@@ -158,6 +181,7 @@ export default function StickFigure({
       pal={SELF}
       hl={new Set<JointKey>(highlightJoints)}
       faceRight={nearSide === "L"}
+      handShapes={handShape}
     />
   );
 
@@ -167,6 +191,7 @@ export default function StickFigure({
       pal={OPP}
       hl={new Set<JointKey>(opponentHighlight)}
       faceRight={opponentNearSide === "L"}
+      handShapes={opponentHandShape}
     />
   ) : null;
 

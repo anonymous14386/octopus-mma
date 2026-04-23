@@ -61,8 +61,10 @@ export default function DiagramViewer({ poses }: { poses: PoseData }) {
         <StickFigure
           joints={anim.joints}
           highlightJoints={anim.highlightJoints}
+          handShape={poses.frames[anim.frameIndex]?.handShape}
           opponentJoints={anim.opponentJoints}
           opponentHighlight={anim.opponentHighlight}
+          opponentHandShape={poses.frames[anim.frameIndex]?.opponentHandShape}
           opponentOnTop={poses.opponentOnTop}
           className="w-48 h-auto drop-shadow-lg"
         />
