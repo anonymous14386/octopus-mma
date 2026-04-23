@@ -6,11 +6,8 @@ import type { TechniqueFrontmatter } from "@/lib/types";
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
-export interface SearchEntry extends TechniqueFrontmatter {
-  discipline: string;
-  beltLevel:  string;
-  slug:       string;
-}
+// TechniqueFrontmatter already contains slug, discipline: Discipline, beltLevel
+export type SearchEntry = TechniqueFrontmatter;
 
 // ─── Scoring ─────────────────────────────────────────────────────────────────
 
