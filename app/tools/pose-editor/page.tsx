@@ -2,6 +2,7 @@
 
 import { useState, useRef, useCallback, useEffect } from "react";
 import StickFigure from "@/components/technique/StickFigure";
+import { usePoseAnimation } from "@/components/technique/usePoseAnimation";
 import {
   type JointKey,
   type PoseData,
@@ -24,6 +25,8 @@ const ALL_JOINTS: JointKey[] = [
 
 const EASE_OPTIONS: EaseFn[] = ["linear", "ease-in", "ease-out", "ease-in-out"];
 
+const SPEEDS = [0.25, 0.5, 1, 2] as const;
+
 const DEFAULT_DATA: PoseData = {
   title: "Untitled Pose",
   loop: true,
@@ -41,7 +44,91 @@ function cloneData<T>(d: T): T {
   return JSON.parse(JSON.stringify(d));
 }
 
-// ─── Component ───────────────────────────────────────────────────────────────
+// ─── Preview canvas (isolated so usePoseAnimation hook is always called) ─────
+
+function PreviewCanvas({
+  data,
+  nearSide,
+}: {
+  data: PoseData;
+  nearSide: "L" | "R";
+}) {
+  const anim = usePoseAnimation(data);
+  const hasOpp = data.frames.some(f => f.opponentJoints != null);
+
+  return (
+    <div className="flex flex-col gap-3">
+      <div className="bg-[#0d0d0d] border border-[#2a2a2a] rounded-lg overflow-hidden">
+        <div
+          className="relative mx-auto select-none"
+          style={{ width: "100%", maxWidth: 380, aspectRatio: "100 / 110" }}
+        >
+          <StickFigure
+            joints={anim.joints}
+            nearSide={nearSide}
+            highlightJoints={anim.highlightJoints as JointKey[]}
+            opponentJoints={hasOpp ? anim.opponentJoints : undefined}
+            opponentNearSide="R"
+            opponentHighlight={anim.opponentHighlight as JointKey[]}
+            opponentOnTop={data.opponentOnTop}
+            className="w-full h-full"
+          />
+        </div>
+
+        {/* Playback controls */}
+        <div className="flex items-center justify-center gap-3 px-4 py-3 border-t border-[#1e1e1e]">
+          <button
+            onClick={anim.isPlaying ? anim.pause : anim.play}
+            className="w-8 h-8 rounded-full bg-[#e74c3c] hover:bg-[#c0392b] text-white flex items-center justify-center transition-colors text-sm"
+          >
+            {anim.isPlaying ? "⏸" : "▶"}
+          </button>
+
+          {/* Frame dots */}
+          <div className="flex items-center gap-1">
+            {data.frames.map((_, i) => (
+              <button
+                key={i}
+                onClick={() => { anim.goToFrame(i); if (!anim.isPlaying) anim.pause(); }}
+                className={`rounded-full transition-all ${
+                  i === anim.frameIndex
+                    ? "w-2.5 h-2.5 bg-[#e74c3c]"
+                    : "w-1.5 h-1.5 bg-[#444] hover:bg-[#888]"
+                }`}
+              />
+            ))}
+          </div>
+
+          {/* Speed */}
+          <div className="flex items-center gap-1">
+            {SPEEDS.map(s => (
+              <button
+                key={s}
+                onClick={() => anim.setSpeed(s)}
+                className={`px-1.5 py-0.5 rounded text-[10px] transition-colors ${
+                  anim.speed === s
+                    ? "bg-[#333] text-white"
+                    : "text-[#555] hover:text-[#888]"
+                }`}
+              >
+                {s}×
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg px-3 py-2 text-center">
+        <p className="text-[11px] text-[#666]">
+          Frame {anim.frameIndex + 1}/{data.frames.length}
+          {anim.frameLabel ? ` — ${anim.frameLabel}` : ""}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+// ─── Main editor ─────────────────────────────────────────────────────────────
 
 export default function PoseEditorPage() {
   const [data,           setData]           = useState<PoseData>(cloneData(DEFAULT_DATA));
@@ -49,6 +136,7 @@ export default function PoseEditorPage() {
   const [dragging,       setDragging]       = useState<JointKey | null>(null);
   const [nearSide,       setNearSide]       = useState<"L" | "R">("L");
   const [editingFigure,  setEditingFigure]  = useState<"self" | "opponent">("self");
+  const [mode,           setMode]           = useState<"edit" | "preview">("edit");
   const [jsonLoad,       setJsonLoad]       = useState("");
   const [loadErr,        setLoadErr]        = useState("");
   const [copied,         setCopied]         = useState(false);
@@ -77,9 +165,9 @@ export default function PoseEditorPage() {
     return { x: Math.max(0, Math.min(100, x)), y: Math.max(0, Math.min(110, y)) };
   }
 
-  // ── Mouse drag ──────────────────────────────────────────────────────────
+  // ── Pointer drag (works for mouse + touch/stylus) ────────────────────────
 
-  const onMouseMove = useCallback((e: MouseEvent) => {
+  const onPointerMove = useCallback((e: PointerEvent) => {
     if (!dragging) return;
     const pos = toSVGCoords(e.clientX, e.clientY);
     setData(prev => {
@@ -96,17 +184,17 @@ export default function PoseEditorPage() {
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [dragging, fi, editingFigure]);
 
-  const onMouseUp = useCallback(() => setDragging(null), []);
+  const onPointerUp = useCallback(() => setDragging(null), []);
 
   useEffect(() => {
     if (!dragging) return;
-    window.addEventListener("mousemove", onMouseMove);
-    window.addEventListener("mouseup",  onMouseUp);
+    window.addEventListener("pointermove", onPointerMove);
+    window.addEventListener("pointerup",   onPointerUp);
     return () => {
-      window.removeEventListener("mousemove", onMouseMove);
-      window.removeEventListener("mouseup",  onMouseUp);
+      window.removeEventListener("pointermove", onPointerMove);
+      window.removeEventListener("pointerup",   onPointerUp);
     };
-  }, [dragging, onMouseMove, onMouseUp]);
+  }, [dragging, onPointerMove, onPointerUp]);
 
   // ── Frame operations ─────────────────────────────────────────────────────
 
@@ -209,6 +297,7 @@ export default function PoseEditorPage() {
       setData(parsed);
       setFi(0);
       setEditingFigure("self");
+      setMode("edit");
       setJsonLoad("");
     } catch (e) {
       setLoadErr((e as Error).message);
@@ -265,56 +354,82 @@ export default function PoseEditorPage() {
               <option value="R">Left (R near)</option>
             </select>
           </label>
-        </div>
 
-        {/* ── Figure toggle ── */}
-        <div className="flex items-center gap-2">
-          <button
-            onClick={() => setEditingFigure("self")}
-            className={`px-3 py-1 rounded text-sm transition-colors ${
-              editingFigure === "self"
-                ? "bg-[#e74c3c] text-white font-medium"
-                : "bg-[#1e1e1e] border border-[#333] text-[#888] hover:text-white"
-            }`}
-          >
-            Self (white)
-          </button>
-
-          {hasOpp ? (
-            <>
-              <button
-                onClick={() => setEditingFigure("opponent")}
-                className={`px-3 py-1 rounded text-sm transition-colors ${
-                  editingFigure === "opponent"
-                    ? "bg-[#2c6098] text-white font-medium"
-                    : "bg-[#1e1e1e] border border-[#333] text-[#888] hover:text-white"
-                }`}
-              >
-                Opponent (blue)
-              </button>
-              <button
-                onClick={removeOpponent}
-                className="px-3 py-1 rounded text-sm bg-[#1e1e1e] border border-[#333] text-[#888] hover:text-red-400 transition-colors"
-              >
-                Remove opponent
-              </button>
-            </>
-          ) : (
+          {/* Edit / Preview toggle */}
+          <div className="flex rounded overflow-hidden border border-[#333] ml-auto">
             <button
-              onClick={addOpponent}
-              className="px-3 py-1 rounded text-sm bg-[#1e1e1e] border border-[#333] text-[#888] hover:text-[#5090c8] transition-colors"
+              onClick={() => setMode("edit")}
+              className={`px-3 py-1.5 text-sm transition-colors ${
+                mode === "edit"
+                  ? "bg-[#e74c3c] text-white font-medium"
+                  : "bg-[#1e1e1e] text-[#888] hover:text-white"
+              }`}
             >
-              + Add opponent
+              Edit
             </button>
-          )}
+            <button
+              onClick={() => setMode("preview")}
+              className={`px-3 py-1.5 text-sm transition-colors ${
+                mode === "preview"
+                  ? "bg-[#e74c3c] text-white font-medium"
+                  : "bg-[#1e1e1e] text-[#888] hover:text-white"
+              }`}
+            >
+              Preview
+            </button>
+          </div>
         </div>
+
+        {/* ── Figure toggle (edit mode only) ── */}
+        {mode === "edit" && (
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => setEditingFigure("self")}
+              className={`px-3 py-1 rounded text-sm transition-colors ${
+                editingFigure === "self"
+                  ? "bg-[#e74c3c] text-white font-medium"
+                  : "bg-[#1e1e1e] border border-[#333] text-[#888] hover:text-white"
+              }`}
+            >
+              Self (white)
+            </button>
+
+            {hasOpp ? (
+              <>
+                <button
+                  onClick={() => setEditingFigure("opponent")}
+                  className={`px-3 py-1 rounded text-sm transition-colors ${
+                    editingFigure === "opponent"
+                      ? "bg-[#2c6098] text-white font-medium"
+                      : "bg-[#1e1e1e] border border-[#333] text-[#888] hover:text-white"
+                  }`}
+                >
+                  Opponent (blue)
+                </button>
+                <button
+                  onClick={removeOpponent}
+                  className="px-3 py-1 rounded text-sm bg-[#1e1e1e] border border-[#333] text-[#888] hover:text-red-400 transition-colors"
+                >
+                  Remove opponent
+                </button>
+              </>
+            ) : (
+              <button
+                onClick={addOpponent}
+                className="px-3 py-1 rounded text-sm bg-[#1e1e1e] border border-[#333] text-[#888] hover:text-[#5090c8] transition-colors"
+              >
+                + Add opponent
+              </button>
+            )}
+          </div>
+        )}
 
         {/* ── Frame tabs ── */}
         <div className="flex items-center gap-1.5 flex-wrap">
           {data.frames.map((f, i) => (
             <button
               key={i}
-              onClick={() => setFi(i)}
+              onClick={() => { setFi(i); setMode("edit"); }}
               className={`px-3 py-1 rounded text-sm transition-colors ${
                 i === fi
                   ? "bg-[#e74c3c] text-white font-medium"
@@ -345,140 +460,157 @@ export default function PoseEditorPage() {
         {/* ── Main grid ── */}
         <div className="grid grid-cols-1 md:grid-cols-[180px_1fr_290px] gap-4">
 
-          {/* ── Left: Joint list ── */}
-          <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg p-3 flex flex-col gap-1">
-            <p className="text-[10px] text-[#555] uppercase tracking-widest mb-1">
-              {editingFigure === "self" ? "Self joints" : "Opponent joints"} — click to highlight
-            </p>
-            {ALL_JOINTS.map(joint => {
-              const pos  = currentJoints?.[joint];
-              const isHL = highlights.includes(joint);
-              return (
-                <button
-                  key={joint}
-                  onClick={() => toggleHighlight(joint)}
-                  className={`flex items-center justify-between px-2 py-0.5 rounded text-left text-[11px] font-mono transition-colors ${
-                    isHL
-                      ? editingFigure === "self"
-                        ? "bg-red-950/50 text-red-400"
-                        : "bg-blue-950/50 text-blue-400"
-                      : "text-[#999] hover:bg-[#222] hover:text-white"
-                  }`}
-                >
-                  <span>{joint}</span>
-                  <span className="text-[#555] text-[10px]">
-                    {pos ? `${pos.x.toFixed(1)},${pos.y.toFixed(1)}` : "—"}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-
-          {/* ── Center: Canvas + frame metadata ── */}
-          <div className="flex flex-col gap-3">
-
-            {/* Drag canvas */}
-            <div className="bg-[#0d0d0d] border border-[#2a2a2a] rounded-lg overflow-hidden">
-              <div
-                className="relative mx-auto select-none"
-                style={{ width: "100%", maxWidth: 380, aspectRatio: "100 / 110" }}
-              >
-                {/* Both figures (pointer-events disabled so overlay handles mouse) */}
-                <StickFigure
-                  joints={frame?.joints ?? NEUTRAL_STANCE}
-                  nearSide={nearSide}
-                  highlightJoints={selfHL}
-                  opponentJoints={frame?.opponentJoints}
-                  opponentNearSide="R"
-                  opponentHighlight={oppHL}
-                  opponentOnTop={data.opponentOnTop}
-                  className="absolute inset-0 w-full h-full pointer-events-none"
-                />
-
-                {/* Drag-handle overlay for the currently-edited figure */}
-                <svg
-                  ref={svgRef}
-                  viewBox="0 0 100 110"
-                  className="absolute inset-0 w-full h-full"
-                  style={{ cursor: dragging ? "grabbing" : "default" }}
-                >
-                  {ALL_JOINTS.map(joint => {
-                    const pos  = currentJoints?.[joint];
-                    if (!pos) return null;
-                    const isHL = highlights.includes(joint);
-                    const color = editingFigure === "self"
-                      ? (isHL ? "rgba(231,76,60,0.6)" : "rgba(255,255,255,0.2)")
-                      : (isHL ? "rgba(231,76,60,0.6)" : "rgba(80,144,200,0.3)");
-                    const strokeColor = editingFigure === "self"
-                      ? (isHL ? "#e74c3c" : "rgba(255,255,255,0.55)")
-                      : (isHL ? "#e74c3c" : "rgba(80,144,200,0.8)");
-                    return (
-                      <g key={joint}>
-                        <circle
-                          cx={pos.x} cy={pos.y} r={6}
-                          fill="transparent"
-                          style={{ cursor: "grab" }}
-                          onMouseDown={e => { e.preventDefault(); setDragging(joint); }}
-                        />
-                        <circle
-                          cx={pos.x} cy={pos.y} r={2.8}
-                          fill={color}
-                          stroke={strokeColor}
-                          strokeWidth={0.7}
-                          style={{ pointerEvents: "none" }}
-                        />
-                      </g>
-                    );
-                  })}
-                </svg>
-              </div>
-
-              <p className="text-center text-[10px] text-[#444] py-2">
-                Drag dots to move joints · Click joint name to toggle highlight
+          {/* ── Left: Joint list (edit mode only) ── */}
+          {mode === "edit" ? (
+            <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg p-3 flex flex-col gap-1">
+              <p className="text-[10px] text-[#555] uppercase tracking-widest mb-1">
+                {editingFigure === "self" ? "Self joints" : "Opponent joints"} — click to highlight
               </p>
+              {ALL_JOINTS.map(joint => {
+                const pos  = currentJoints?.[joint];
+                const isHL = highlights.includes(joint);
+                return (
+                  <button
+                    key={joint}
+                    onClick={() => toggleHighlight(joint)}
+                    className={`flex items-center justify-between px-2 py-0.5 rounded text-left text-[11px] font-mono transition-colors ${
+                      isHL
+                        ? editingFigure === "self"
+                          ? "bg-red-950/50 text-red-400"
+                          : "bg-blue-950/50 text-blue-400"
+                        : "text-[#999] hover:bg-[#222] hover:text-white"
+                    }`}
+                  >
+                    <span>{joint}</span>
+                    <span className="text-[#555] text-[10px]">
+                      {pos ? `${pos.x.toFixed(1)},${pos.y.toFixed(1)}` : "—"}
+                    </span>
+                  </button>
+                );
+              })}
             </div>
-
-            {/* Frame metadata */}
-            <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg p-3 grid grid-cols-2 gap-3">
-              <label className="flex flex-col gap-1">
-                <span className="text-[10px] text-[#555] uppercase tracking-wider">Label</span>
-                <input
-                  value={frame?.label ?? ""}
-                  onChange={e => updateFrame("label", e.target.value)}
-                  className="bg-[#111] border border-[#333] rounded px-2 py-1 text-sm"
-                />
-              </label>
-
-              <label className="flex flex-col gap-1">
-                <span className="text-[10px] text-[#555] uppercase tracking-wider">Duration (ms)</span>
-                <input
-                  type="number" min={50} step={50}
-                  value={frame?.duration ?? 1000}
-                  onChange={e => updateFrame("duration", Number(e.target.value))}
-                  className="bg-[#111] border border-[#333] rounded px-2 py-1 text-sm"
-                />
-              </label>
-
-              <label className="flex flex-col gap-1">
-                <span className="text-[10px] text-[#555] uppercase tracking-wider">Ease</span>
-                <select
-                  value={frame?.ease ?? "ease-in-out"}
-                  onChange={e => updateFrame("ease", e.target.value as EaseFn)}
-                  className="bg-[#111] border border-[#333] rounded px-2 py-1 text-sm"
-                >
-                  {EASE_OPTIONS.map(e => <option key={e} value={e}>{e}</option>)}
-                </select>
-              </label>
-
-              <div className="flex flex-col justify-end">
-                <button
-                  onClick={resetFrameToNeutral}
-                  className="px-3 py-1.5 rounded text-xs bg-[#282828] hover:bg-[#333] text-[#888] hover:text-white transition-colors"
-                >
-                  Reset {editingFigure} to neutral
-                </button>
-              </div>
+          ) : (
+            <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg p-3 flex flex-col gap-2">
+              <p className="text-[10px] text-[#555] uppercase tracking-widest mb-1">Frames</p>
+              {data.frames.map((f, i) => (
+                <div key={i} className="flex items-center gap-2 text-[11px] font-mono text-[#666]">
+                  <span className="text-[#444]">{i + 1}</span>
+                  <span className="flex-1 truncate">{f.label || `Frame ${i + 1}`}</span>
+                  <span className="text-[#555]">{f.duration}ms</span>
+                </div>
+              ))}
             </div>
+          )}
+
+          {/* ── Center: Canvas ── */}
+          <div className="flex flex-col gap-3">
+            {mode === "preview" ? (
+              <PreviewCanvas data={data} nearSide={nearSide} />
+            ) : (
+              <>
+                {/* Drag canvas */}
+                <div className="bg-[#0d0d0d] border border-[#2a2a2a] rounded-lg overflow-hidden">
+                  <div
+                    className="relative mx-auto select-none"
+                    style={{ width: "100%", maxWidth: 380, aspectRatio: "100 / 110" }}
+                  >
+                    <StickFigure
+                      joints={frame?.joints ?? NEUTRAL_STANCE}
+                      nearSide={nearSide}
+                      highlightJoints={selfHL}
+                      opponentJoints={frame?.opponentJoints}
+                      opponentNearSide="R"
+                      opponentHighlight={oppHL}
+                      opponentOnTop={data.opponentOnTop}
+                      className="absolute inset-0 w-full h-full pointer-events-none"
+                    />
+
+                    {/* Drag-handle overlay */}
+                    <svg
+                      ref={svgRef}
+                      viewBox="0 0 100 110"
+                      className="absolute inset-0 w-full h-full"
+                      style={{ cursor: dragging ? "grabbing" : "default" }}
+                    >
+                      {ALL_JOINTS.map(joint => {
+                        const pos  = currentJoints?.[joint];
+                        if (!pos) return null;
+                        const isHL = highlights.includes(joint);
+                        const color = editingFigure === "self"
+                          ? (isHL ? "rgba(231,76,60,0.6)" : "rgba(255,255,255,0.2)")
+                          : (isHL ? "rgba(231,76,60,0.6)" : "rgba(80,144,200,0.3)");
+                        const strokeColor = editingFigure === "self"
+                          ? (isHL ? "#e74c3c" : "rgba(255,255,255,0.55)")
+                          : (isHL ? "#e74c3c" : "rgba(80,144,200,0.8)");
+                        return (
+                          <g key={joint}>
+                            <circle
+                              cx={pos.x} cy={pos.y} r={6}
+                              fill="transparent"
+                              style={{ cursor: "grab" }}
+                              onPointerDown={e => { e.preventDefault(); setDragging(joint); }}
+                            />
+                            <circle
+                              cx={pos.x} cy={pos.y} r={2.8}
+                              fill={color}
+                              stroke={strokeColor}
+                              strokeWidth={0.7}
+                              style={{ pointerEvents: "none" }}
+                            />
+                          </g>
+                        );
+                      })}
+                    </svg>
+                  </div>
+
+                  <p className="text-center text-[10px] text-[#444] py-2">
+                    Drag dots to move joints · Click joint name to toggle highlight
+                  </p>
+                </div>
+
+                {/* Frame metadata */}
+                <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg p-3 grid grid-cols-2 gap-3">
+                  <label className="flex flex-col gap-1">
+                    <span className="text-[10px] text-[#555] uppercase tracking-wider">Label</span>
+                    <input
+                      value={frame?.label ?? ""}
+                      onChange={e => updateFrame("label", e.target.value)}
+                      className="bg-[#111] border border-[#333] rounded px-2 py-1 text-sm"
+                    />
+                  </label>
+
+                  <label className="flex flex-col gap-1">
+                    <span className="text-[10px] text-[#555] uppercase tracking-wider">Duration (ms)</span>
+                    <input
+                      type="number" min={50} step={50}
+                      value={frame?.duration ?? 1000}
+                      onChange={e => updateFrame("duration", Number(e.target.value))}
+                      className="bg-[#111] border border-[#333] rounded px-2 py-1 text-sm"
+                    />
+                  </label>
+
+                  <label className="flex flex-col gap-1">
+                    <span className="text-[10px] text-[#555] uppercase tracking-wider">Ease</span>
+                    <select
+                      value={frame?.ease ?? "ease-in-out"}
+                      onChange={e => updateFrame("ease", e.target.value as EaseFn)}
+                      className="bg-[#111] border border-[#333] rounded px-2 py-1 text-sm"
+                    >
+                      {EASE_OPTIONS.map(e => <option key={e} value={e}>{e}</option>)}
+                    </select>
+                  </label>
+
+                  <div className="flex flex-col justify-end">
+                    <button
+                      onClick={resetFrameToNeutral}
+                      className="px-3 py-1.5 rounded text-xs bg-[#282828] hover:bg-[#333] text-[#888] hover:text-white transition-colors"
+                    >
+                      Reset {editingFigure} to neutral
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
           </div>
 
           {/* ── Right: JSON output + load ── */}
