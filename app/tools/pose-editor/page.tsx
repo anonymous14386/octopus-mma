@@ -27,6 +27,27 @@ const EASE_OPTIONS: EaseFn[] = ["linear", "ease-in", "ease-out", "ease-in-out"];
 
 const SPEEDS = [0.25, 0.5, 1, 2] as const;
 
+const MY_POSES_KEY = "mma-my-poses";
+
+interface SavedPose {
+  id: string;
+  name: string;
+  savedAt: string;
+  data: PoseData;
+}
+
+function loadSavedPoses(): SavedPose[] {
+  try {
+    return JSON.parse(localStorage.getItem(MY_POSES_KEY) ?? "[]") as SavedPose[];
+  } catch {
+    return [];
+  }
+}
+
+function persistSavedPoses(poses: SavedPose[]) {
+  localStorage.setItem(MY_POSES_KEY, JSON.stringify(poses));
+}
+
 const DEFAULT_DATA: PoseData = {
   title: "Untitled Pose",
   loop: true,
@@ -140,8 +161,13 @@ export default function PoseEditorPage() {
   const [jsonLoad,       setJsonLoad]       = useState("");
   const [loadErr,        setLoadErr]        = useState("");
   const [copied,         setCopied]         = useState(false);
+  const [savedPoses,     setSavedPoses]     = useState<SavedPose[]>([]);
+  const [saveName,       setSaveName]       = useState("");
 
   const svgRef = useRef<SVGSVGElement>(null);
+
+  // Load saved poses from localStorage on mount
+  useEffect(() => { setSavedPoses(loadSavedPoses()); }, []);
 
   const frame      = data.frames[fi] ?? data.frames[0];
   const hasOpp     = frame?.opponentJoints != null;
@@ -278,6 +304,32 @@ export default function PoseEditorPage() {
       if (idx >= 0) cur.splice(idx, 1); else cur.push(joint);
       updateFrame("opponentHighlight", cur as JointKey[]);
     }
+  }
+
+  // ── My Poses (localStorage) ──────────────────────────────────────────────
+
+  function saveMyPose() {
+    const name = saveName.trim() || data.title || "Untitled";
+    const next: SavedPose[] = [
+      { id: crypto.randomUUID(), name, savedAt: new Date().toISOString(), data: cloneData(data) },
+      ...savedPoses,
+    ];
+    persistSavedPoses(next);
+    setSavedPoses(next);
+    setSaveName("");
+  }
+
+  function loadMyPose(pose: SavedPose) {
+    setData(cloneData(pose.data));
+    setFi(0);
+    setEditingFigure("self");
+    setMode("edit");
+  }
+
+  function deleteMyPose(id: string) {
+    const next = savedPoses.filter(p => p.id !== id);
+    persistSavedPoses(next);
+    setSavedPoses(next);
   }
 
   // ── JSON I/O ─────────────────────────────────────────────────────────────
@@ -651,6 +703,53 @@ export default function PoseEditorPage() {
               >
                 Load
               </button>
+            </div>
+
+            {/* My Poses */}
+            <div className="bg-[#1a1a1a] border border-[#2a2a2a] rounded-lg p-3 flex flex-col gap-2">
+              <span className="text-[10px] text-[#555] uppercase tracking-wider">My Poses</span>
+              <div className="flex gap-2">
+                <input
+                  value={saveName}
+                  onChange={e => setSaveName(e.target.value)}
+                  onKeyDown={e => e.key === "Enter" && saveMyPose()}
+                  placeholder={data.title || "Name…"}
+                  className="flex-1 bg-[#0d0d0d] border border-[#333] rounded px-2 py-1.5 text-[11px] placeholder:text-[#444]"
+                />
+                <button
+                  onClick={saveMyPose}
+                  className="px-3 py-1.5 rounded text-xs bg-[#2a2a2a] hover:bg-[#333] text-[#888] hover:text-white transition-colors whitespace-nowrap"
+                >
+                  Save
+                </button>
+              </div>
+
+              {savedPoses.length === 0 ? (
+                <p className="text-[10px] text-[#444] text-center py-2">No saved poses yet</p>
+              ) : (
+                <div className="flex flex-col gap-1 max-h-48 overflow-y-auto">
+                  {savedPoses.map(pose => (
+                    <div key={pose.id} className="flex items-center gap-1.5 group">
+                      <button
+                        onClick={() => loadMyPose(pose)}
+                        className="flex-1 text-left px-2 py-1 rounded text-[11px] text-[#999] hover:text-white hover:bg-[#222] transition-colors truncate"
+                        title={pose.name}
+                      >
+                        {pose.name}
+                        <span className="text-[#555] ml-1.5 text-[9px]">
+                          {new Date(pose.savedAt).toLocaleDateString()}
+                        </span>
+                      </button>
+                      <button
+                        onClick={() => deleteMyPose(pose.id)}
+                        className="opacity-0 group-hover:opacity-100 px-1.5 py-1 rounded text-[10px] text-[#555] hover:text-red-400 transition-all"
+                      >
+                        ✕
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </div>
