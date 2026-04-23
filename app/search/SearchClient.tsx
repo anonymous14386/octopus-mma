@@ -99,8 +99,8 @@ export default function SearchClient({ entries }: { entries: SearchEntry[] }) {
   const [discipline, setDiscipline] = useState<string>("");
   const [typeFilter, setTypeFilter] = useState<string>("");
 
-  const disciplines  = useMemo(() => [...new Set(entries.map(e => e.discipline))].sort(), [entries]);
-  const techniqueTypes = useMemo(() => [...new Set(entries.map(e => e.techniqueType))].sort(), [entries]);
+  const disciplines  = useMemo(() => Array.from(new Set(entries.map(e => e.discipline))).sort(), [entries]);
+  const techniqueTypes = useMemo(() => Array.from(new Set(entries.map(e => e.techniqueType))).sort(), [entries]);
 
   const results = useMemo(() => {
     const q = query.trim();
