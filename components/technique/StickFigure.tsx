@@ -62,6 +62,15 @@ function Figure({
   const eyeX  = jt.head.x + (faceRight ?  3 : -3);
   const noseX = jt.head.x + (faceRight ?  7 : -7);
 
+  // Oriented shape helpers — angle is direction of the limb from parent→child
+  const ang = (parent: {x:number;y:number}, child: {x:number;y:number}) =>
+    Math.atan2(child.y - parent.y, child.x - parent.x) * 180 / Math.PI;
+
+  const nHandAng = ang(nP.elbow, nP.hand);
+  const fHandAng = ang(fP.elbow, fP.hand);
+  const nFootAng = ang(nP.knee,  nP.foot);
+  const fFootAng = ang(fP.knee,  fP.foot);
+
   return (
     <>
       {/* Torso volume fill */}
@@ -79,9 +88,16 @@ function Figure({
         stroke={fc(["hip","knee","foot"])} strokeWidth={6.5} strokeLinecap="round" />
       <line x1={fP.knee.x} y1={fP.knee.y} x2={fP.foot.x} y2={fP.foot.y}
         stroke={fc(["knee","foot"])} strokeWidth={5.5} strokeLinecap="round" />
-      <circle cx={fP.elbow.x} cy={fP.elbow.y} r={3}   fill={fc(["elbow"])} />
-      <circle cx={fP.knee.x}  cy={fP.knee.y}  r={4}   fill={fc(["knee"])} />
-      <circle cx={fP.hand.x}  cy={fP.hand.y}  r={3}   fill={fc(["hand"])} />
+      <circle cx={fP.elbow.x} cy={fP.elbow.y} r={3} fill={fc(["elbow"])} />
+      <circle cx={fP.knee.x}  cy={fP.knee.y}  r={4} fill={fc(["knee"])} />
+      {/* Far hand */}
+      <g transform={`translate(${fP.hand.x},${fP.hand.y}) rotate(${fHandAng})`}>
+        <rect x={1} y={-2} width={6} height={4} rx={1.5} fill={fc(["hand"])} opacity={0.85} />
+      </g>
+      {/* Far foot */}
+      <g transform={`translate(${fP.foot.x},${fP.foot.y}) rotate(${fFootAng})`}>
+        <rect x={1} y={-3} width={8} height={5.5} rx={2} fill={fc(["foot","knee"])} opacity={0.85} />
+      </g>
 
       {/* Torso / centre mass */}
       <line x1={jt.shoulderL.x} y1={jt.shoulderL.y} x2={jt.shoulderR.x} y2={jt.shoulderR.y}
@@ -100,9 +116,16 @@ function Figure({
         stroke={nc(["hip","knee","foot"])} strokeWidth={8.5} strokeLinecap="round" />
       <line x1={nP.knee.x} y1={nP.knee.y} x2={nP.foot.x} y2={nP.foot.y}
         stroke={nc(["knee","foot"])} strokeWidth={7} strokeLinecap="round" />
-      <circle cx={nP.elbow.x} cy={nP.elbow.y} r={4}   fill={nc(["elbow"])} />
-      <circle cx={nP.knee.x}  cy={nP.knee.y}  r={5}   fill={nc(["knee"])} />
-      <circle cx={nP.hand.x}  cy={nP.hand.y}  r={3.5} fill={nc(["hand"])} />
+      <circle cx={nP.elbow.x} cy={nP.elbow.y} r={4} fill={nc(["elbow"])} />
+      <circle cx={nP.knee.x}  cy={nP.knee.y}  r={5} fill={nc(["knee"])} />
+      {/* Near hand */}
+      <g transform={`translate(${nP.hand.x},${nP.hand.y}) rotate(${nHandAng})`}>
+        <rect x={1} y={-2.5} width={7} height={5} rx={2} fill={nc(["hand"])} />
+      </g>
+      {/* Near foot */}
+      <g transform={`translate(${nP.foot.x},${nP.foot.y}) rotate(${nFootAng})`}>
+        <rect x={1} y={-3.5} width={9} height={7} rx={2.5} fill={nc(["foot","knee"])} />
+      </g>
 
       {/* Neck */}
       <line x1={jt.neck.x} y1={jt.neck.y} x2={jt.head.x} y2={jt.head.y}
@@ -148,7 +171,7 @@ export default function StickFigure({
   ) : null;
 
   return (
-    <svg viewBox="0 0 100 110" xmlns="http://www.w3.org/2000/svg" className={className} aria-hidden="true">
+    <svg viewBox="0 -10 100 124" xmlns="http://www.w3.org/2000/svg" className={className} aria-hidden="true">
       {/* Render behind first, then in front on top */}
       {opponentOnTop ? <>{selfFig}{oppFig}</> : <>{oppFig}{selfFig}</>}
     </svg>
