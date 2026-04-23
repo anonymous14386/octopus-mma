@@ -124,9 +124,11 @@ function PreviewCanvas({
             joints={anim.joints}
             nearSide={nearSide}
             highlightJoints={anim.highlightJoints as JointKey[]}
+            handShape={data.frames[anim.frameIndex]?.handShape}
             opponentJoints={hasOpp ? anim.opponentJoints : undefined}
             opponentNearSide="R"
             opponentHighlight={anim.opponentHighlight as JointKey[]}
+            opponentHandShape={data.frames[anim.frameIndex]?.opponentHandShape}
             opponentOnTop={data.opponentOnTop}
             className="w-full h-full"
           />
@@ -609,9 +611,11 @@ export default function PoseEditorPage() {
                       joints={frame?.joints ?? NEUTRAL_STANCE}
                       nearSide={nearSide}
                       highlightJoints={selfHL}
+                      handShape={frame?.handShape}
                       opponentJoints={frame?.opponentJoints}
                       opponentNearSide="R"
                       opponentHighlight={oppHL}
+                      opponentHandShape={frame?.opponentHandShape}
                       opponentOnTop={data.opponentOnTop}
                       className="absolute inset-0 w-full h-full pointer-events-none"
                     />
@@ -699,6 +703,34 @@ export default function PoseEditorPage() {
                       Reset {editingFigure} to neutral
                     </button>
                   </div>
+
+                  {/* Hand shapes */}
+                  {(["handL", "handR"] as const).map(hand => {
+                    const shapeKey = editingFigure === "self" ? "handShape" : "opponentHandShape";
+                    const cur = (frame?.[shapeKey]?.[hand]) ?? "fist";
+                    return (
+                      <div key={hand} className="flex flex-col gap-1">
+                        <span className="text-[10px] text-[#555] uppercase tracking-wider">
+                          {hand === "handL" ? "Left hand" : "Right hand"}
+                        </span>
+                        <div className="flex rounded overflow-hidden border border-[#333]">
+                          {(["fist", "open"] as const).map(shape => (
+                            <button
+                              key={shape}
+                              onClick={() => updateFrame(shapeKey, { ...(frame?.[shapeKey] ?? {}), [hand]: shape })}
+                              className={`flex-1 py-1 text-xs transition-colors ${
+                                cur === shape
+                                  ? "bg-[#e74c3c] text-white font-medium"
+                                  : "bg-[#1e1e1e] text-[#666] hover:text-white"
+                              }`}
+                            >
+                              {shape === "fist" ? "✊ Fist" : "🖐 Open"}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
+                    );
+                  })}
                 </div>
               </>
             )}

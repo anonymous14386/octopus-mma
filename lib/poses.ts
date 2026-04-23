@@ -26,7 +26,8 @@ export interface JointSet {
 
 export type JointKey = keyof JointSet;
 
-export type EaseFn = "linear" | "ease-in" | "ease-out" | "ease-in-out";
+export type EaseFn    = "linear" | "ease-in" | "ease-out" | "ease-in-out";
+export type HandShape = "fist" | "open";
 
 export interface PoseFrame {
   duration:           number;    // ms for this frame
@@ -34,8 +35,10 @@ export interface PoseFrame {
   label?:             string;    // shown in viewer controls
   joints:             JointSet;
   highlight?:         JointKey[];
+  handShape?:         Partial<Record<"handL" | "handR", HandShape>>;
   opponentJoints?:    JointSet;  // second figure (grappling / partner techniques)
   opponentHighlight?: JointKey[];
+  opponentHandShape?: Partial<Record<"handL" | "handR", HandShape>>;
 }
 
 export interface PoseData {
