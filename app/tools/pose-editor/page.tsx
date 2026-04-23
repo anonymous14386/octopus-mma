@@ -27,6 +27,42 @@ const EASE_OPTIONS: EaseFn[] = ["linear", "ease-in", "ease-out", "ease-in-out"];
 
 const SPEEDS = [0.25, 0.5, 1, 2] as const;
 
+// ─── Skeleton constraints ────────────────────────────────────────────────────
+
+const PARENT: Partial<Record<JointKey, JointKey>> = {
+  head:      "neck",
+  neck:      "spine",
+  shoulderL: "neck",      shoulderR: "neck",
+  elbowL:    "shoulderL", elbowR:    "shoulderR",
+  handL:     "elbowL",   handR:     "elbowR",
+  hipL:      "spine",     hipR:      "spine",
+  kneeL:     "hipL",     kneeR:     "hipR",
+  footL:     "kneeL",    footR:     "kneeR",
+};
+
+function ptDist(a: { x: number; y: number }, b: { x: number; y: number }) {
+  return Math.sqrt((a.x - b.x) ** 2 + (a.y - b.y) ** 2);
+}
+
+const BONE_LENGTHS = Object.fromEntries(
+  (Object.entries(PARENT) as [JointKey, JointKey][]).map(([child, parent]) => [
+    child, ptDist(NEUTRAL_STANCE[child], NEUTRAL_STANCE[parent]),
+  ])
+) as Partial<Record<JointKey, number>>;
+
+function constrainToParent(
+  pos: { x: number; y: number },
+  parentPos: { x: number; y: number },
+  boneLen: number,
+): { x: number; y: number } {
+  const dx = pos.x - parentPos.x;
+  const dy = pos.y - parentPos.y;
+  const d  = Math.sqrt(dx * dx + dy * dy);
+  if (d < 0.001) return { x: parentPos.x, y: parentPos.y + boneLen };
+  const s = boneLen / d;
+  return { x: parentPos.x + dx * s, y: parentPos.y + dy * s };
+}
+
 const MY_POSES_KEY = "mma-my-poses";
 
 interface SavedPose {
@@ -195,16 +231,18 @@ export default function PoseEditorPage() {
 
   const onPointerMove = useCallback((e: PointerEvent) => {
     if (!dragging) return;
-    const pos = toSVGCoords(e.clientX, e.clientY);
+    const raw = toSVGCoords(e.clientX, e.clientY);
     setData(prev => {
       const d = cloneData(prev);
       const f = d.frames[fi];
       if (!f) return d;
-      if (editingFigure === "self") {
-        f.joints[dragging] = pos;
-      } else if (f.opponentJoints) {
-        f.opponentJoints[dragging] = pos;
-      }
+      const joints = editingFigure === "self" ? f.joints : f.opponentJoints;
+      if (!joints) return d;
+      const parentKey = PARENT[dragging];
+      const boneLen   = BONE_LENGTHS[dragging];
+      joints[dragging] = (parentKey && boneLen)
+        ? constrainToParent(raw, joints[parentKey], boneLen)
+        : raw;
       return d;
     });
   // eslint-disable-next-line react-hooks/exhaustive-deps
