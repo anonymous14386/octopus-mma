@@ -118,7 +118,7 @@ function PreviewCanvas({
       <div className="bg-[#0d0d0d] border border-[#2a2a2a] rounded-lg overflow-hidden">
         <div
           className="relative mx-auto select-none"
-          style={{ width: "100%", maxWidth: 380, aspectRatio: "100 / 110" }}
+          style={{ width: "100%", maxWidth: 380, aspectRatio: "100 / 124" }}
         >
           <StickFigure
             joints={anim.joints}
@@ -222,8 +222,9 @@ export default function PoseEditorPage() {
     const el = svgRef.current;
     if (!el) return { x: 0, y: 0 };
     const rect = el.getBoundingClientRect();
+    // viewBox is "0 -10 100 124": x maps 0→100, y maps -10→114
     const x = Math.round(((clientX - rect.left) / rect.width)  * 1000) / 10;
-    const y = Math.round(((clientY - rect.top)  / rect.height) * 1100) / 10;
+    const y = Math.round(((clientY - rect.top)  / rect.height) * 1240) / 10 - 10;
     return { x: Math.max(0, Math.min(100, x)), y: Math.max(0, Math.min(110, y)) };
   }
 
@@ -602,7 +603,7 @@ export default function PoseEditorPage() {
                 <div className="bg-[#0d0d0d] border border-[#2a2a2a] rounded-lg overflow-hidden">
                   <div
                     className="relative mx-auto select-none"
-                    style={{ width: "100%", maxWidth: 380, aspectRatio: "100 / 110" }}
+                    style={{ width: "100%", maxWidth: 380, aspectRatio: "100 / 124" }}
                   >
                     <StickFigure
                       joints={frame?.joints ?? NEUTRAL_STANCE}
@@ -618,7 +619,7 @@ export default function PoseEditorPage() {
                     {/* Drag-handle overlay */}
                     <svg
                       ref={svgRef}
-                      viewBox="0 0 100 110"
+                      viewBox="0 -10 100 124"
                       className="absolute inset-0 w-full h-full"
                       style={{ cursor: dragging ? "grabbing" : "default" }}
                     >
