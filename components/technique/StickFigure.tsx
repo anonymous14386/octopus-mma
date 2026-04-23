@@ -75,12 +75,13 @@ function Figure({
   const nHandAng = ang(nP.elbow, nP.hand);
   const fHandAng = ang(fP.elbow, fP.hand);
 
-  // Foot: if shin is mostly vertical (standing), rotate 90° so foot lies flat.
-  // If shin is mostly horizontal (kicking), keep inline with shin.
+  // Foot: if shin is mostly vertical (standing), align foot with facing direction.
+  // If shin is mostly horizontal (kicking/sweeping), keep inline with the shin.
   const nShinRad = angRad(nP.knee, nP.foot);
   const fShinRad = angRad(fP.knee, fP.foot);
-  const nFootAng = ang(nP.knee, nP.foot) + (Math.abs(Math.sin(nShinRad)) > 0.6 ? 90 : 0);
-  const fFootAng = ang(fP.knee, fP.foot) + (Math.abs(Math.sin(fShinRad)) > 0.6 ? 90 : 0);
+  const facingAng = faceRight ? 0 : 180;
+  const nFootAng = Math.abs(Math.sin(nShinRad)) > 0.6 ? facingAng : ang(nP.knee, nP.foot);
+  const fFootAng = Math.abs(Math.sin(fShinRad)) > 0.6 ? facingAng : ang(fP.knee, fP.foot);
 
   // Hand shape per side
   const nsKey = `hand${ns}` as "handL" | "handR";
