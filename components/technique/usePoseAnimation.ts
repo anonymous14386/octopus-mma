@@ -19,6 +19,57 @@ function lerpJoints(a: JointSet, b: JointSet, t: number): JointSet {
   ) as unknown as JointSet;
 }
 
+// Limb bones in parent→child order. Each child is recomputed from its parent using
+// angle interpolation + fixed length so bones don't shrink/grow during transitions.
+const LIMB_BONES: [JointKey, JointKey][] = [
+  ["shoulderL", "elbowL"], ["elbowL", "handL"],
+  ["shoulderR", "elbowR"], ["elbowR", "handR"],
+  ["hipL", "kneeL"],       ["kneeL", "footL"],
+  ["hipR", "kneeR"],       ["kneeR", "footR"],
+];
+
+function lerpAngle(a: number, b: number, t: number): number {
+  let d = b - a;
+  if (d > Math.PI)  d -= 2 * Math.PI;
+  if (d < -Math.PI) d += 2 * Math.PI;
+  return a + d * t;
+}
+
+function lerpJointsConstantBones(
+  a: JointSet, b: JointSet, t: number,
+  boneLengths: Map<string, number>,
+): JointSet {
+  const result = lerpJoints(a, b, t);
+  for (const [parent, child] of LIMB_BONES) {
+    const aAng = Math.atan2(a[child].y - a[parent].y, a[child].x - a[parent].x);
+    const bAng = Math.atan2(b[child].y - b[parent].y, b[child].x - b[parent].x);
+    const ang  = lerpAngle(aAng, bAng, t);
+    const len  = boneLengths.get(`${parent}-${child}`) ?? 10;
+    const p    = result[parent];
+    result[child] = { x: p.x + Math.cos(ang) * len, y: p.y + Math.sin(ang) * len };
+  }
+  return result;
+}
+
+function avgBoneLengths(frames: PoseData["frames"]): Map<string, number> {
+  const map = new Map<string, number>();
+  for (const [parent, child] of LIMB_BONES) {
+    let total = 0, count = 0;
+    for (const f of frames) {
+      const p = f.joints[parent], c = f.joints[child];
+      total += Math.hypot(c.x - p.x, c.y - p.y);
+      count++;
+      if (f.opponentJoints) {
+        const op = f.opponentJoints[parent], oc = f.opponentJoints[child];
+        total += Math.hypot(oc.x - op.x, oc.y - op.y);
+        count++;
+      }
+    }
+    map.set(`${parent}-${child}`, total / count);
+  }
+  return map;
+}
+
 function applyEase(t: number, fn: EaseFn = "ease-in-out"): number {
   switch (fn) {
     case "ease-in":     return t * t;
@@ -66,11 +117,11 @@ export function usePoseAnimation(data: PoseData): PoseAnimState {
 
   useEffect(() => { speedRef.current = speed; }, [speed]);
 
-  const { frameStarts, totalDuration } = useMemo(() => {
+  const { frameStarts, totalDuration, boneLengths } = useMemo(() => {
     const starts: number[] = [];
     let acc = 0;
     for (const f of frames) { starts.push(acc); acc += f.duration; }
-    return { frameStarts: starts, totalDuration: acc };
+    return { frameStarts: starts, totalDuration: acc, boneLengths: avgBoneLengths(frames) };
   }, [frames]);
 
   const getStateAt = useCallback((elapsed: number) => {
@@ -94,8 +145,8 @@ export function usePoseAnimation(data: PoseData): PoseAnimState {
     const oppB = frames[nextFi].opponentJoints ?? frames[nextFi].joints;
 
     return {
-      joints:         lerpJoints(frames[fi].joints, frames[nextFi].joints, easedP),
-      opponentJoints: hasOpponent ? lerpJoints(oppA, oppB, easedP) : undefined,
+      joints:         lerpJointsConstantBones(frames[fi].joints, frames[nextFi].joints, easedP, boneLengths),
+      opponentJoints: hasOpponent ? lerpJointsConstantBones(oppA, oppB, easedP, boneLengths) : undefined,
       frameIndex:     fi,
     };
   }, [data.loop, frames, frameStarts, totalDuration, hasOpponent]);

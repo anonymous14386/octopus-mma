@@ -142,6 +142,7 @@ function Figure({
       </g>
       {/* Near-side arms — outlined independently so boundary over leg is visible */}
       <g filter="url(#near-outline)">
+        <circle cx={nP.shoulder.x} cy={nP.shoulder.y} r={4.5} fill={nc(["shoulder","elbow","hand"])} />
         <line x1={nP.shoulder.x} y1={nP.shoulder.y} x2={nP.elbow.x} y2={nP.elbow.y}
           stroke={nc(["shoulder","elbow","hand"])} strokeWidth={7} strokeLinecap="round" />
         <line x1={nP.elbow.x} y1={nP.elbow.y} x2={nP.hand.x} y2={nP.hand.y}
