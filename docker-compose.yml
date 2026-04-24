@@ -3,6 +3,8 @@ services:
     build: .
     container_name: octopus_mma
     restart: always
+    environment:
+      - EDITOR_PASSWORD=${EDITOR_PASSWORD}
     networks:
       - web_proxy
 
