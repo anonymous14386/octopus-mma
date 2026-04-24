@@ -126,7 +126,11 @@ function Figure({
       <line x1={jt.neck.x} y1={jt.neck.y} x2={jt.head.x} y2={jt.head.y}
         stroke={pal.ctr} strokeWidth={6} strokeLinecap="round" />
 
-      {/* Near-side limbs (rendered in front of torso/neck) */}
+      {/* Head — drawn before near limbs so the near arm can pass in front of it */}
+      <circle cx={jt.head.x} cy={jt.head.y} r={9}
+        fill={pal.ctr} stroke={pal.ctr} strokeWidth={2.5} />
+
+      {/* Near-side limbs (brightest, on top of everything) */}
       <line x1={nP.shoulder.x} y1={nP.shoulder.y} x2={nP.elbow.x} y2={nP.elbow.y}
         stroke={nc(["shoulder","elbow","hand"])} strokeWidth={7} strokeLinecap="round" />
       <line x1={nP.elbow.x} y1={nP.elbow.y} x2={nP.hand.x} y2={nP.hand.y}
@@ -147,10 +151,6 @@ function Figure({
       <g transform={`translate(${nP.foot.x},${nP.foot.y}) rotate(${nFootAng})`}>
         <rect x={-3} y={-3} width={11} height={6} rx={2.5} fill={nc(["foot","knee"])} />
       </g>
-
-      {/* Head — solid fill covers neck line endpoint; drawn last so it's always on top */}
-      <circle cx={jt.head.x} cy={jt.head.y} r={9}
-        fill={pal.ctr} stroke={pal.ctr} strokeWidth={2.5} />
     </>
   );
 }
