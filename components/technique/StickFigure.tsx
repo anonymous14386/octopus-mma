@@ -129,26 +129,28 @@ function Figure({
       <circle cx={jt.head.x} cy={jt.head.y} r={9}
         fill={pal.ctr} stroke={pal.ctr} strokeWidth={2.5} />
 
-      {/* Near-side legs (behind near arms when crossing) */}
-      <line x1={nP.hip.x} y1={nP.hip.y} x2={nP.knee.x} y2={nP.knee.y}
-        stroke={nc(["hip","knee","foot"])} strokeWidth={8.5} strokeLinecap="round" />
-      <line x1={nP.knee.x} y1={nP.knee.y} x2={nP.foot.x} y2={nP.foot.y}
-        stroke={nc(["knee","foot"])} strokeWidth={7} strokeLinecap="round" />
-      <circle cx={nP.knee.x} cy={nP.knee.y} r={5} fill={nc(["knee"])} />
-      <g transform={`translate(${nP.foot.x},${nP.foot.y}) rotate(${nFootAng})`}>
-        <rect x={-3} y={-3} width={11} height={6} rx={2.5} fill={nc(["foot","knee"])} />
-      </g>
-      {/* Near-side arms (on top of near legs when crossing) */}
-      <line x1={nP.shoulder.x} y1={nP.shoulder.y} x2={nP.elbow.x} y2={nP.elbow.y}
-        stroke={nc(["shoulder","elbow","hand"])} strokeWidth={7} strokeLinecap="round" />
-      <line x1={nP.elbow.x} y1={nP.elbow.y} x2={nP.hand.x} y2={nP.hand.y}
-        stroke={nc(["elbow","hand"])} strokeWidth={6} strokeLinecap="round" />
-      <circle cx={nP.elbow.x} cy={nP.elbow.y} r={4} fill={nc(["elbow"])} />
-      {/* Near hand — fist: compact square / open: thin blade perpendicular to forearm */}
-      <g transform={`translate(${nP.hand.x},${nP.hand.y}) rotate(${nHandOpen ? nHandAng + 90 : nHandAng})`}>
-        {nHandOpen
-          ? <rect x={-7} y={-1.2} width={14} height={2.4} rx={1}   fill={nc(["hand"])} />
-          : <rect x={1}  y={-2.8} width={6}  height={5.5} rx={2.2} fill={nc(["hand"])} />}
+      {/* Near-side limbs — outlined so bright colours read over grey torso */}
+      <g filter="url(#near-outline)">
+        {/* Legs first so arms render on top when crossing */}
+        <line x1={nP.hip.x} y1={nP.hip.y} x2={nP.knee.x} y2={nP.knee.y}
+          stroke={nc(["hip","knee","foot"])} strokeWidth={8.5} strokeLinecap="round" />
+        <line x1={nP.knee.x} y1={nP.knee.y} x2={nP.foot.x} y2={nP.foot.y}
+          stroke={nc(["knee","foot"])} strokeWidth={7} strokeLinecap="round" />
+        <circle cx={nP.knee.x} cy={nP.knee.y} r={5} fill={nc(["knee"])} />
+        <g transform={`translate(${nP.foot.x},${nP.foot.y}) rotate(${nFootAng})`}>
+          <rect x={-3} y={-3} width={11} height={6} rx={2.5} fill={nc(["foot","knee"])} />
+        </g>
+        <line x1={nP.shoulder.x} y1={nP.shoulder.y} x2={nP.elbow.x} y2={nP.elbow.y}
+          stroke={nc(["shoulder","elbow","hand"])} strokeWidth={7} strokeLinecap="round" />
+        <line x1={nP.elbow.x} y1={nP.elbow.y} x2={nP.hand.x} y2={nP.hand.y}
+          stroke={nc(["elbow","hand"])} strokeWidth={6} strokeLinecap="round" />
+        <circle cx={nP.elbow.x} cy={nP.elbow.y} r={4} fill={nc(["elbow"])} />
+        {/* Near hand — fist: compact square / open: thin blade perpendicular to forearm */}
+        <g transform={`translate(${nP.hand.x},${nP.hand.y}) rotate(${nHandOpen ? nHandAng + 90 : nHandAng})`}>
+          {nHandOpen
+            ? <rect x={-7} y={-1.2} width={14} height={2.4} rx={1}   fill={nc(["hand"])} />
+            : <rect x={1}  y={-2.8} width={6}  height={5.5} rx={2.2} fill={nc(["hand"])} />}
+        </g>
       </g>
     </>
   );
@@ -190,6 +192,18 @@ export default function StickFigure({
 
   return (
     <svg viewBox="0 -10 100 124" xmlns="http://www.w3.org/2000/svg" className={className} aria-hidden="true">
+      <defs>
+        {/* Dark outline applied to near-side limbs so bright colours read over grey torso */}
+        <filter id="near-outline" colorInterpolationFilters="sRGB">
+          <feMorphology in="SourceAlpha" operator="dilate" radius="1.1" result="dilated"/>
+          <feFlood floodColor="#0a0a14" floodOpacity="0.72" result="colour"/>
+          <feComposite in="colour" in2="dilated" operator="in" result="outline"/>
+          <feMerge>
+            <feMergeNode in="outline"/>
+            <feMergeNode in="SourceGraphic"/>
+          </feMerge>
+        </filter>
+      </defs>
       {/* Render behind first, then in front on top */}
       {opponentOnTop ? <>{selfFig}{oppFig}</> : <>{oppFig}{selfFig}</>}
     </svg>
