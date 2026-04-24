@@ -149,7 +149,7 @@ export function usePoseAnimation(data: PoseData): PoseAnimState {
       opponentJoints: hasOpponent ? lerpJointsConstantBones(oppA, oppB, easedP, boneLengths) : undefined,
       frameIndex:     fi,
     };
-  }, [data.loop, frames, frameStarts, totalDuration, hasOpponent]);
+  }, [data.loop, frames, frameStarts, totalDuration, hasOpponent, boneLengths]);
 
   useEffect(() => {
     function tick(ts: number) {

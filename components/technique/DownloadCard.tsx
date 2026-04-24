@@ -98,7 +98,7 @@ function cRect(ctx: Ctx, cx: number, cy: number, ang: number,
                x: number, y: number, w: number, h: number, r: number, col: string, alpha = 1) {
   ctx.save(); ctx.translate(cx, cy); ctx.rotate(ang);
   ctx.globalAlpha = alpha; ctx.fillStyle = col;
-  ctx.beginPath(); (ctx as CanvasRenderingContext2D & { roundRect: Function }).roundRect(x, y, w, h, r);
+  ctx.beginPath(); (ctx as CanvasRenderingContext2D & { roundRect: (x: number, y: number, w: number, h: number, r: number) => void }).roundRect(x, y, w, h, r);
   ctx.fill(); ctx.restore(); ctx.globalAlpha = 1;
 }
 function oLine(ctx: Ctx, x1: number, y1: number, x2: number, y2: number, col: string, w: number, ol: number) {
