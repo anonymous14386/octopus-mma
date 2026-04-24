@@ -183,11 +183,23 @@ export default function TechniquePage({ params }: Props) {
         <section className="border-t border-brand-border pt-8">
           <h2 className="section-heading">Related Techniques</h2>
           <div className="flex flex-wrap gap-2">
-            {frontmatter.relatedTechniques.map((rel) => (
-              <span key={rel} className="px-3 py-1.5 bg-brand-card border border-brand-border text-brand-muted rounded text-sm">
-                {rel.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())}
-              </span>
-            ))}
+            {frontmatter.relatedTechniques.map((rel) => {
+              const found = findTechniqueSlug(discipline, rel);
+              const label = rel.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+              return found ? (
+                <Link
+                  key={rel}
+                  href={`/${found.discipline}/${found.beltLevel}/${found.slug}`}
+                  className="px-3 py-1.5 bg-brand-card border border-brand-border text-brand-muted rounded text-sm hover:text-white hover:border-white transition-colors"
+                >
+                  {label}
+                </Link>
+              ) : (
+                <span key={rel} className="px-3 py-1.5 bg-brand-card border border-brand-border text-brand-muted rounded text-sm">
+                  {label}
+                </span>
+              );
+            })}
           </div>
         </section>
       )}

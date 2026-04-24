@@ -94,26 +94,25 @@ function Figure({
         fill={pal.ctr} fillOpacity={0.22} stroke="none"
       />
 
-      {/* Far-side limbs (rendered behind) */}
-      <line x1={fP.shoulder.x} y1={fP.shoulder.y} x2={fP.elbow.x} y2={fP.elbow.y}
-        stroke={fc(["shoulder","elbow","hand"])} strokeWidth={5} strokeLinecap="round" />
-      <line x1={fP.elbow.x} y1={fP.elbow.y} x2={fP.hand.x} y2={fP.hand.y}
-        stroke={fc(["elbow","hand"])} strokeWidth={4} strokeLinecap="round" />
+      {/* Far-side legs (behind far arms when crossing) */}
       <line x1={fP.hip.x} y1={fP.hip.y} x2={fP.knee.x} y2={fP.knee.y}
         stroke={fc(["hip","knee","foot"])} strokeWidth={6.5} strokeLinecap="round" />
       <line x1={fP.knee.x} y1={fP.knee.y} x2={fP.foot.x} y2={fP.foot.y}
         stroke={fc(["knee","foot"])} strokeWidth={5.5} strokeLinecap="round" />
+      <circle cx={fP.knee.x} cy={fP.knee.y} r={4} fill={fc(["knee"])} />
+      <g transform={`translate(${fP.foot.x},${fP.foot.y}) rotate(${fFootAng})`} opacity={0.85}>
+        <rect x={-3} y={-2.5} width={9} height={5} rx={2} fill={fc(["foot","knee"])} />
+      </g>
+      {/* Far-side arms (on top of far legs when crossing) */}
+      <line x1={fP.shoulder.x} y1={fP.shoulder.y} x2={fP.elbow.x} y2={fP.elbow.y}
+        stroke={fc(["shoulder","elbow","hand"])} strokeWidth={5} strokeLinecap="round" />
+      <line x1={fP.elbow.x} y1={fP.elbow.y} x2={fP.hand.x} y2={fP.hand.y}
+        stroke={fc(["elbow","hand"])} strokeWidth={4} strokeLinecap="round" />
       <circle cx={fP.elbow.x} cy={fP.elbow.y} r={3} fill={fc(["elbow"])} />
-      <circle cx={fP.knee.x}  cy={fP.knee.y}  r={4} fill={fc(["knee"])} />
-      {/* Far hand — fist: compact square / open: thin blade perpendicular to forearm */}
       <g transform={`translate(${fP.hand.x},${fP.hand.y}) rotate(${fHandOpen ? fHandAng + 90 : fHandAng})`} opacity={0.85}>
         {fHandOpen
           ? <rect x={-6} y={-1}   width={12} height={2}   rx={0.8} fill={fc(["hand"])} />
           : <rect x={1}  y={-2}   width={5}  height={4}   rx={1.8} fill={fc(["hand"])} />}
-      </g>
-      {/* Far foot */}
-      <g transform={`translate(${fP.foot.x},${fP.foot.y}) rotate(${fFootAng})`} opacity={0.85}>
-        <rect x={-3} y={-2.5} width={9} height={5} rx={2} fill={fc(["foot","knee"])} />
       </g>
 
       {/* Torso / centre mass + neck (all medium, drawn before near limbs) */}
@@ -130,26 +129,26 @@ function Figure({
       <circle cx={jt.head.x} cy={jt.head.y} r={9}
         fill={pal.ctr} stroke={pal.ctr} strokeWidth={2.5} />
 
-      {/* Near-side limbs (brightest, on top of everything) */}
-      <line x1={nP.shoulder.x} y1={nP.shoulder.y} x2={nP.elbow.x} y2={nP.elbow.y}
-        stroke={nc(["shoulder","elbow","hand"])} strokeWidth={7} strokeLinecap="round" />
-      <line x1={nP.elbow.x} y1={nP.elbow.y} x2={nP.hand.x} y2={nP.hand.y}
-        stroke={nc(["elbow","hand"])} strokeWidth={6} strokeLinecap="round" />
+      {/* Near-side legs (behind near arms when crossing) */}
       <line x1={nP.hip.x} y1={nP.hip.y} x2={nP.knee.x} y2={nP.knee.y}
         stroke={nc(["hip","knee","foot"])} strokeWidth={8.5} strokeLinecap="round" />
       <line x1={nP.knee.x} y1={nP.knee.y} x2={nP.foot.x} y2={nP.foot.y}
         stroke={nc(["knee","foot"])} strokeWidth={7} strokeLinecap="round" />
+      <circle cx={nP.knee.x} cy={nP.knee.y} r={5} fill={nc(["knee"])} />
+      <g transform={`translate(${nP.foot.x},${nP.foot.y}) rotate(${nFootAng})`}>
+        <rect x={-3} y={-3} width={11} height={6} rx={2.5} fill={nc(["foot","knee"])} />
+      </g>
+      {/* Near-side arms (on top of near legs when crossing) */}
+      <line x1={nP.shoulder.x} y1={nP.shoulder.y} x2={nP.elbow.x} y2={nP.elbow.y}
+        stroke={nc(["shoulder","elbow","hand"])} strokeWidth={7} strokeLinecap="round" />
+      <line x1={nP.elbow.x} y1={nP.elbow.y} x2={nP.hand.x} y2={nP.hand.y}
+        stroke={nc(["elbow","hand"])} strokeWidth={6} strokeLinecap="round" />
       <circle cx={nP.elbow.x} cy={nP.elbow.y} r={4} fill={nc(["elbow"])} />
-      <circle cx={nP.knee.x}  cy={nP.knee.y}  r={5} fill={nc(["knee"])} />
       {/* Near hand — fist: compact square / open: thin blade perpendicular to forearm */}
       <g transform={`translate(${nP.hand.x},${nP.hand.y}) rotate(${nHandOpen ? nHandAng + 90 : nHandAng})`}>
         {nHandOpen
           ? <rect x={-7} y={-1.2} width={14} height={2.4} rx={1}   fill={nc(["hand"])} />
           : <rect x={1}  y={-2.8} width={6}  height={5.5} rx={2.2} fill={nc(["hand"])} />}
-      </g>
-      {/* Near foot */}
-      <g transform={`translate(${nP.foot.x},${nP.foot.y}) rotate(${nFootAng})`}>
-        <rect x={-3} y={-3} width={11} height={6} rx={2.5} fill={nc(["foot","knee"])} />
       </g>
     </>
   );
