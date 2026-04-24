@@ -16,6 +16,9 @@
 # production
 /build
 
+# generated at build time
+/public/gifs
+
 # misc
 .DS_Store
 *.pem
