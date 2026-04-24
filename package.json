@@ -4,12 +4,14 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build",
+    "build": "node scripts/generate-gifs.mjs && next build",
     "start": "next start",
     "lint": "next lint"
   },
   "dependencies": {
+    "@resvg/resvg-js": "^2.6.2",
     "gif.js": "^0.2.0",
+    "gifencoder": "^2.0.1",
     "gray-matter": "^4.0.3",
     "next": "14.2.35",
     "react": "^18",

@@ -299,6 +299,8 @@ export default function DownloadCard({
   const [state, setState] = useState<"idle" | "generating" | "encoding">("idle");
   const [progress, setProgress] = useState(0);
 
+  const pregenUrl = `/gifs/${frontmatter.discipline}/${frontmatter.beltLevel}/${frontmatter.slug}.gif`;
+
   const handleDownload = useCallback(async () => {
     if (!poses) return;
     setState("generating");
@@ -351,6 +353,14 @@ export default function DownloadCard({
 
   return (
     <div className="flex flex-wrap items-center gap-3">
+      <a
+        href={pregenUrl}
+        download
+        className="px-4 py-1.5 bg-brand-card border border-brand-border text-brand-muted rounded text-sm hover:text-white hover:border-white transition-colors"
+      >
+        Quick Download
+      </a>
+      <span className="text-brand-border">|</span>
       <select
         value={format}
         onChange={e => setFormat(e.target.value as Format)}
@@ -368,7 +378,7 @@ export default function DownloadCard({
       >
         {state === "generating" && `Rendering ${Math.round(progress * 100)}%…`}
         {state === "encoding"   && `Encoding ${Math.round(progress * 100)}%…`}
-        {state === "idle"       && "Download Card"}
+        {state === "idle"       && "Custom Card"}
       </button>
     </div>
   );
