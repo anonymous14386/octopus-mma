@@ -1,7 +1,7 @@
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { BELT_COLORS, DISCIPLINE_META, type Discipline } from "@/lib/types";
-import { getTechnique, getAllTechniqueSlugs, getPoses } from "@/lib/content";
+import { getTechnique, getAllTechniqueSlugs, getPoses, findTechniqueSlug } from "@/lib/content";
 import DiagramViewer from "@/components/technique/DiagramViewer";
 
 interface Props {
@@ -93,11 +93,23 @@ export default function TechniquePage({ params }: Props) {
         <section>
           <h2 className="text-sm font-semibold text-brand-muted uppercase tracking-wider mb-2">Prerequisites</h2>
           <div className="flex flex-wrap gap-2">
-            {frontmatter.prerequisites.map((prereq) => (
-              <span key={prereq} className="px-3 py-1 bg-brand-card border border-brand-border text-brand-muted rounded text-sm">
-                {prereq.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase())}
-              </span>
-            ))}
+            {frontmatter.prerequisites.map((prereq) => {
+              const found = findTechniqueSlug(discipline, prereq);
+              const label = prereq.replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+              return found ? (
+                <Link
+                  key={prereq}
+                  href={`/${found.discipline}/${found.beltLevel}/${found.slug}`}
+                  className="px-3 py-1 bg-brand-card border border-brand-border text-brand-muted rounded text-sm hover:text-white hover:border-white transition-colors"
+                >
+                  {label}
+                </Link>
+              ) : (
+                <span key={prereq} className="px-3 py-1 bg-brand-card border border-brand-border text-brand-muted rounded text-sm">
+                  {label}
+                </span>
+              );
+            })}
           </div>
         </section>
       )}

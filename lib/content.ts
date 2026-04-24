@@ -63,6 +63,23 @@ export function getPoses(
   }
 }
 
+export function findTechniqueSlug(
+  discipline: Discipline,
+  slug: string
+): { discipline: string; beltLevel: string; slug: string } | null {
+  const disciplineDir = path.join(contentDir, discipline);
+  if (!fs.existsSync(disciplineDir)) return null;
+  for (const belt of fs.readdirSync(disciplineDir)) {
+    const beltDir = path.join(disciplineDir, belt);
+    if (!fs.statSync(beltDir).isDirectory()) continue;
+    const candidates = [`${slug}.md`, `${slug}.mdx`];
+    if (candidates.some((f) => fs.existsSync(path.join(beltDir, f)))) {
+      return { discipline, beltLevel: belt, slug };
+    }
+  }
+  return null;
+}
+
 export function getAllTechniqueSlugs(): {
   discipline: string;
   beltLevel: string;
