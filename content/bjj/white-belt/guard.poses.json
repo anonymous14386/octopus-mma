@@ -23,8 +23,8 @@
         "hipR":      { "x": 64, "y": 60 },
         "kneeL":     { "x": 74, "y": 38 },
         "kneeR":     { "x": 74, "y": 68 },
-        "footL":     { "x": 84, "y": 56 },
-        "footR":     { "x": 82, "y": 58 }
+        "footL":     { "x": 66, "y": 52 },
+        "footR":     { "x": 64, "y": 62 }
       },
       "opponentJoints": {
         "head":      { "x": 72, "y": 28 },
@@ -64,8 +64,8 @@
         "hipR":      { "x": 64, "y": 58 },
         "kneeL":     { "x": 72, "y": 36 },
         "kneeR":     { "x": 72, "y": 66 },
-        "footL":     { "x": 82, "y": 54 },
-        "footR":     { "x": 80, "y": 56 }
+        "footL":     { "x": 64, "y": 50 },
+        "footR":     { "x": 62, "y": 60 }
       },
       "opponentJoints": {
         "head":      { "x": 74, "y": 30 },
