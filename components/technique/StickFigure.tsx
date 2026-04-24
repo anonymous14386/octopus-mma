@@ -131,6 +131,7 @@ function Figure({
 
       {/* Near-side legs — outlined independently so arm boundary shows on top */}
       <g filter="url(#near-outline)">
+        <circle cx={nP.hip.x} cy={nP.hip.y} r={4.5} fill={nc(["hip","knee","foot"])} />
         <line x1={nP.hip.x} y1={nP.hip.y} x2={nP.knee.x} y2={nP.knee.y}
           stroke={nc(["hip","knee","foot"])} strokeWidth={8.5} strokeLinecap="round" />
         <line x1={nP.knee.x} y1={nP.knee.y} x2={nP.foot.x} y2={nP.foot.y}

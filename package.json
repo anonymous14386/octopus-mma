@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "gif.js": "^0.2.0",
     "gray-matter": "^4.0.3",
     "next": "14.2.35",
     "react": "^18",

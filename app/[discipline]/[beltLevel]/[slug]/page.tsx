@@ -3,6 +3,7 @@ import Link from "next/link";
 import { BELT_COLORS, DISCIPLINE_META, type Discipline } from "@/lib/types";
 import { getTechnique, getAllTechniqueSlugs, getPoses, findTechniqueSlug } from "@/lib/content";
 import DiagramViewer from "@/components/technique/DiagramViewer";
+import DownloadCard from "@/components/technique/DownloadCard";
 
 interface Props {
   params: { discipline: string; beltLevel: string; slug: string };
@@ -116,8 +117,9 @@ export default function TechniquePage({ params }: Props) {
 
       {/* Diagram / animation */}
       {poses ? (
-        <section>
+        <section className="space-y-4">
           <DiagramViewer poses={poses} />
+          <DownloadCard frontmatter={frontmatter} poses={poses} />
         </section>
       ) : (
         <section className="border border-dashed border-brand-border rounded-xl p-8 text-center bg-brand-card/50">
