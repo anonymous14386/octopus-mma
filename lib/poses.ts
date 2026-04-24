@@ -29,6 +29,12 @@ export type JointKey = keyof JointSet;
 export type EaseFn    = "linear" | "ease-in" | "ease-out" | "ease-in-out";
 export type HandShape = "fist" | "open";
 
+// Which segments of the opponent figure render in FRONT of the self figure.
+// When present, the renderer does 3 passes: opponent-back → self → opponent-front.
+// "armNear" / "legNear" = the side facing the viewer; "armFar" / "legFar" = the side away.
+export type OpponentSegment = "head" | "torso" | "armNear" | "armFar" | "legNear" | "legFar";
+export const ALL_OPPONENT_SEGMENTS: OpponentSegment[] = ["head", "torso", "armNear", "armFar", "legNear", "legFar"];
+
 export interface PoseFrame {
   duration:           number;    // ms for this frame
   ease?:              EaseFn;
