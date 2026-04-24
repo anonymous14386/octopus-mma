@@ -7,18 +7,18 @@
  * Runs as `node scripts/generate-gifs.mjs` before `next build`.
  */
 
-import fs   from "fs";
-import path from "path";
-import { Resvg } from "@resvg/resvg-js";
-import GIFEncoder from "gifencoder";
+import fs         from "fs";
+import path       from "path";
+import { Resvg }  from "@resvg/resvg-js";
+import GIFEncoder from "gif-encoder-2";
 
 const ROOT        = path.resolve(".");
 const CONTENT_DIR = path.join(ROOT, "content");
 const OUTPUT_DIR  = path.join(ROOT, "public", "gifs");
 
-const CARD_W = 1080;
-const CARD_H = 1350;
-const FPS_MS = 60;
+const CARD_W = 540;
+const CARD_H = 675;
+const FPS_MS = 80;
 
 // ── Palette ───────────────────────────────────────────────────────────────────
 const NEAR = "#d4cfc8";
@@ -254,27 +254,21 @@ async function generateGif(poses, frontmatter, outputPath) {
   const frameCount    = Math.ceil(totalDuration / FPS_MS);
 
   const encoder = new GIFEncoder(CARD_W, CARD_H);
-  encoder.start();
-  encoder.setRepeat(0);
   encoder.setDelay(FPS_MS);
+  encoder.setRepeat(0);
   encoder.setQuality(10);
+  encoder.start();
 
   for (let i = 0; i < frameCount; i++) {
     const { joints, label } = getFrameState(poses, i * FPS_MS, bl);
     const svg    = cardSVG(frontmatter, joints, label);
     const resvg  = new Resvg(svg, { fitTo: { mode: "width", value: CARD_W } });
     const { pixels } = resvg.render();
-    encoder.addFrame(pixels);
+    encoder.addFrame(Buffer.from(pixels));
   }
 
   encoder.finish();
-
-  await new Promise((resolve, reject) => {
-    const out = fs.createWriteStream(outputPath);
-    encoder.createReadStream().pipe(out);
-    out.on("finish", resolve);
-    out.on("error", reject);
-  });
+  fs.writeFileSync(outputPath, encoder.out.getData());
 }
 
 // ── Main: walk content/, generate all GIFs ────────────────────────────────────
