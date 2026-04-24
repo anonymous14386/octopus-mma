@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const EDITOR_PASSWORD = process.env.EDITOR_PASSWORD ?? "changeme";
+const EDITOR_PASSWORD = (process.env.EDITOR_PASSWORD ?? "changeme").trim();
 const EDITOR_TOKEN    = "mma-editor-v1";
 
 export async function POST(req: NextRequest) {
