@@ -63,9 +63,6 @@ function Figure({
   const fP = { shoulder: J(`shoulder${fs}`), elbow: J(`elbow${fs}`), hand: J(`hand${fs}`),
                hip: J(`hip${fs}`), knee: J(`knee${fs}`), foot: J(`foot${fs}`) };
 
-  const eyeX  = jt.head.x + (faceRight ?  3 : -3);
-  const noseX = jt.head.x + (faceRight ?  7 : -7);
-
   // Oriented shape helpers
   const ang = (parent: {x:number;y:number}, child: {x:number;y:number}) =>
     Math.atan2(child.y - parent.y, child.x - parent.x) * 180 / Math.PI;
@@ -119,15 +116,17 @@ function Figure({
         <rect x={-3} y={-2.5} width={9} height={5} rx={2} fill={fc(["foot","knee"])} />
       </g>
 
-      {/* Torso / centre mass */}
+      {/* Torso / centre mass + neck (all medium, drawn before near limbs) */}
       <line x1={jt.shoulderL.x} y1={jt.shoulderL.y} x2={jt.shoulderR.x} y2={jt.shoulderR.y}
         stroke={pal.ctr} strokeWidth={5} strokeLinecap="round" opacity={0.85} />
       <line x1={jt.neck.x} y1={jt.neck.y} x2={jt.spine.x} y2={jt.spine.y}
         stroke={pal.ctr} strokeWidth={9} strokeLinecap="round" />
       <line x1={jt.hipL.x} y1={jt.hipL.y} x2={jt.hipR.x} y2={jt.hipR.y}
         stroke={pal.ctr} strokeWidth={5} strokeLinecap="round" opacity={0.85} />
+      <line x1={jt.neck.x} y1={jt.neck.y} x2={jt.head.x} y2={jt.head.y}
+        stroke={pal.ctr} strokeWidth={6} strokeLinecap="round" />
 
-      {/* Near-side limbs (rendered in front) */}
+      {/* Near-side limbs (rendered in front of torso/neck) */}
       <line x1={nP.shoulder.x} y1={nP.shoulder.y} x2={nP.elbow.x} y2={nP.elbow.y}
         stroke={nc(["shoulder","elbow","hand"])} strokeWidth={7} strokeLinecap="round" />
       <line x1={nP.elbow.x} y1={nP.elbow.y} x2={nP.hand.x} y2={nP.hand.y}
@@ -149,15 +148,9 @@ function Figure({
         <rect x={-3} y={-3} width={11} height={6} rx={2.5} fill={nc(["foot","knee"])} />
       </g>
 
-      {/* Neck */}
-      <line x1={jt.neck.x} y1={jt.neck.y} x2={jt.head.x} y2={jt.head.y}
-        stroke={pal.ctr} strokeWidth={6} strokeLinecap="round" />
-
-      {/* Head */}
+      {/* Head — solid fill covers neck line endpoint; drawn last so it's always on top */}
       <circle cx={jt.head.x} cy={jt.head.y} r={9}
-        fill={pal.ctr} fillOpacity={0.2} stroke={pal.ctr} strokeWidth={2.5} />
-      <circle cx={eyeX}  cy={jt.head.y - 1.5} r={1.4} fill={pal.ctr} />
-      <circle cx={noseX} cy={jt.head.y + 1.5} r={1.6} fill={pal.ctr} opacity={0.85} />
+        fill={pal.ctr} stroke={pal.ctr} strokeWidth={2.5} />
     </>
   );
 }
