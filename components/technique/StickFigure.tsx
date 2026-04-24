@@ -129,9 +129,8 @@ function Figure({
       <circle cx={jt.head.x} cy={jt.head.y} r={9}
         fill={pal.ctr} stroke={pal.ctr} strokeWidth={2.5} />
 
-      {/* Near-side limbs — outlined so bright colours read over grey torso */}
+      {/* Near-side legs — outlined independently so arm boundary shows on top */}
       <g filter="url(#near-outline)">
-        {/* Legs first so arms render on top when crossing */}
         <line x1={nP.hip.x} y1={nP.hip.y} x2={nP.knee.x} y2={nP.knee.y}
           stroke={nc(["hip","knee","foot"])} strokeWidth={8.5} strokeLinecap="round" />
         <line x1={nP.knee.x} y1={nP.knee.y} x2={nP.foot.x} y2={nP.foot.y}
@@ -140,6 +139,9 @@ function Figure({
         <g transform={`translate(${nP.foot.x},${nP.foot.y}) rotate(${nFootAng})`}>
           <rect x={-3} y={-3} width={11} height={6} rx={2.5} fill={nc(["foot","knee"])} />
         </g>
+      </g>
+      {/* Near-side arms — outlined independently so boundary over leg is visible */}
+      <g filter="url(#near-outline)">
         <line x1={nP.shoulder.x} y1={nP.shoulder.y} x2={nP.elbow.x} y2={nP.elbow.y}
           stroke={nc(["shoulder","elbow","hand"])} strokeWidth={7} strokeLinecap="round" />
         <line x1={nP.elbow.x} y1={nP.elbow.y} x2={nP.hand.x} y2={nP.hand.y}
@@ -195,7 +197,7 @@ export default function StickFigure({
       <defs>
         {/* Dark outline applied to near-side limbs so bright colours read over grey torso */}
         <filter id="near-outline" colorInterpolationFilters="sRGB">
-          <feMorphology in="SourceAlpha" operator="dilate" radius="1.1" result="dilated"/>
+          <feMorphology in="SourceAlpha" operator="dilate" radius="0.6" result="dilated"/>
           <feFlood floodColor="#0a0a14" floodOpacity="0.72" result="colour"/>
           <feComposite in="colour" in2="dilated" operator="in" result="outline"/>
           <feMerge>
