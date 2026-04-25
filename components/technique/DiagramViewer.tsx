@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import StickFigure from "./StickFigure";
 import { usePoseAnimation } from "./usePoseAnimation";
 import { type PoseData, NEUTRAL_STANCE } from "@/lib/poses";
@@ -47,8 +48,17 @@ function IconPause() {
 
 // ─── Component ───────────────────────────────────────────────────────────────
 
+function IconFlip() {
+  return (
+    <svg className="w-4 h-4" fill="none" stroke="currentColor" strokeWidth={2} viewBox="0 0 24 24" aria-hidden="true">
+      <path strokeLinecap="round" strokeLinejoin="round" d="M7 16V4m0 0L3 8m4-4 4 4M17 8v12m0 0 4-4m-4 4-4-4" />
+    </svg>
+  );
+}
+
 export default function DiagramViewer({ poses }: { poses: PoseData }) {
   const anim = usePoseAnimation(poses ?? EMPTY);
+  const [flipped, setFlipped] = useState(false);
 
   return (
     <div className="bg-brand-card border border-brand-border rounded-xl overflow-hidden select-none">
@@ -60,9 +70,11 @@ export default function DiagramViewer({ poses }: { poses: PoseData }) {
       >
         <StickFigure
           joints={anim.joints}
+          nearSide={flipped ? "R" : "L"}
           highlightJoints={anim.highlightJoints}
           handShape={poses.frames[anim.frameIndex]?.handShape}
           opponentJoints={anim.opponentJoints}
+          opponentNearSide={flipped ? "L" : "R"}
           opponentHighlight={anim.opponentHighlight}
           opponentHandShape={poses.frames[anim.frameIndex]?.opponentHandShape}
           opponentOnTop={poses.opponentOnTop}
@@ -120,6 +132,17 @@ export default function DiagramViewer({ poses }: { poses: PoseData }) {
             className="p-2 text-brand-muted hover:text-white transition-colors rounded"
           >
             <IconNext />
+          </button>
+        </div>
+
+        <div className="flex items-center gap-1">
+          <button
+            aria-label="Flip view"
+            onClick={() => setFlipped(f => !f)}
+            title="Flip view"
+            className={`p-2 rounded transition-colors ${flipped ? "text-brand-red" : "text-brand-muted hover:text-white"}`}
+          >
+            <IconFlip />
           </button>
         </div>
 
