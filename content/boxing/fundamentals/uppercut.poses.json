@@ -1,0 +1,117 @@
+{
+  "title": "Uppercut",
+  "loop": true,
+  "frames": [
+    {
+      "duration": 1200,
+      "ease": "ease-in-out",
+      "label": "Guard",
+      "joints": {
+        "head":      { "x": 50, "y": 8  },
+        "neck":      { "x": 49, "y": 15 },
+        "spine":     { "x": 48, "y": 50 },
+        "shoulderL": { "x": 54, "y": 21 },
+        "shoulderR": { "x": 42, "y": 21 },
+        "elbowL":    { "x": 58, "y": 28 },
+        "elbowR":    { "x": 40, "y": 26 },
+        "handL":     { "x": 62, "y": 20 },
+        "handR":     { "x": 44, "y": 18 },
+        "hipL":      { "x": 52, "y": 52 },
+        "hipR":      { "x": 44, "y": 52 },
+        "kneeL":     { "x": 55, "y": 70 },
+        "kneeR":     { "x": 40, "y": 70 },
+        "footL":     { "x": 60, "y": 92 },
+        "footR":     { "x": 34, "y": 92 }
+      }
+    },
+    {
+      "duration": 300,
+      "ease": "ease-out",
+      "label": "Dip",
+      "joints": {
+        "head":      { "x": 50, "y": 12 },
+        "neck":      { "x": 49, "y": 19 },
+        "spine":     { "x": 48, "y": 54 },
+        "shoulderL": { "x": 54, "y": 25 },
+        "shoulderR": { "x": 42, "y": 25 },
+        "elbowL":    { "x": 56, "y": 32 },
+        "elbowR":    { "x": 40, "y": 30 },
+        "handL":     { "x": 58, "y": 40 },
+        "handR":     { "x": 44, "y": 22 },
+        "hipL":      { "x": 52, "y": 56 },
+        "hipR":      { "x": 44, "y": 56 },
+        "kneeL":     { "x": 55, "y": 75 },
+        "kneeR":     { "x": 40, "y": 75 },
+        "footL":     { "x": 60, "y": 92 },
+        "footR":     { "x": 34, "y": 92 }
+      }
+    },
+    {
+      "duration": 350,
+      "ease": "ease-out",
+      "label": "Extension",
+      "highlight": ["handL", "elbowL"],
+      "joints": {
+        "head":      { "x": 50, "y": 7  },
+        "neck":      { "x": 49, "y": 14 },
+        "spine":     { "x": 48, "y": 48 },
+        "shoulderL": { "x": 56, "y": 19 },
+        "shoulderR": { "x": 42, "y": 21 },
+        "elbowL":    { "x": 56, "y": 24 },
+        "elbowR":    { "x": 40, "y": 26 },
+        "handL":     { "x": 59, "y": 12 },
+        "handR":     { "x": 44, "y": 18 },
+        "hipL":      { "x": 52, "y": 50 },
+        "hipR":      { "x": 44, "y": 50 },
+        "kneeL":     { "x": 55, "y": 68 },
+        "kneeR":     { "x": 40, "y": 68 },
+        "footL":     { "x": 60, "y": 92 },
+        "footR":     { "x": 34, "y": 92 }
+      }
+    },
+    {
+      "duration": 350,
+      "ease": "ease-in",
+      "label": "Retract",
+      "joints": {
+        "head":      { "x": 50, "y": 12 },
+        "neck":      { "x": 49, "y": 19 },
+        "spine":     { "x": 48, "y": 54 },
+        "shoulderL": { "x": 54, "y": 25 },
+        "shoulderR": { "x": 42, "y": 25 },
+        "elbowL":    { "x": 56, "y": 32 },
+        "elbowR":    { "x": 40, "y": 30 },
+        "handL":     { "x": 58, "y": 40 },
+        "handR":     { "x": 44, "y": 22 },
+        "hipL":      { "x": 52, "y": 56 },
+        "hipR":      { "x": 44, "y": 56 },
+        "kneeL":     { "x": 55, "y": 75 },
+        "kneeR":     { "x": 40, "y": 75 },
+        "footL":     { "x": 60, "y": 92 },
+        "footR":     { "x": 34, "y": 92 }
+      }
+    },
+    {
+      "duration": 900,
+      "ease": "ease-in-out",
+      "label": "Return to Guard",
+      "joints": {
+        "head":      { "x": 50, "y": 8  },
+        "neck":      { "x": 49, "y": 15 },
+        "spine":     { "x": 48, "y": 50 },
+        "shoulderL": { "x": 54, "y": 21 },
+        "shoulderR": { "x": 42, "y": 21 },
+        "elbowL":    { "x": 58, "y": 28 },
+        "elbowR":    { "x": 40, "y": 26 },
+        "handL":     { "x": 62, "y": 20 },
+        "handR":     { "x": 44, "y": 18 },
+        "hipL":      { "x": 52, "y": 52 },
+        "hipR":      { "x": 44, "y": 52 },
+        "kneeL":     { "x": 55, "y": 70 },
+        "kneeR":     { "x": 40, "y": 70 },
+        "footL":     { "x": 60, "y": 92 },
+        "footR":     { "x": 34, "y": 92 }
+      }
+    }
+  ]
+}
