@@ -5,16 +5,18 @@ import type { JointSet, JointKey, HandShape } from "@/lib/poses";
 // ── Palette types ─────────────────────────────────────────────────────────────
 
 interface Palette {
-  near: string;
-  far:  string;
-  ctr:  string;
-  hl:   string;
+  near:    string;
+  far:     string;
+  ctr:     string;
+  hl:      string;
+  hand:    string; // near-side fist — distinct from limb colour
+  handFar: string; // far-side fist
 }
 
-// Self figure: warm white (practitioner being taught)
-const SELF: Palette = { near: "#d4cfc8", far: "#3c3c52", ctr: "#888090", hl: "#e74c3c" };
-// Opponent figure: blue (training partner / attacker)
-const OPP:  Palette = { near: "#5090c8", far: "#1a3d6a", ctr: "#2c6098", hl: "#e74c3c" };
+// Self figure: warm white limbs, amber fists (evokes hand wraps)
+const SELF: Palette = { near: "#d4cfc8", far: "#3c3c52", ctr: "#888090", hl: "#e74c3c", hand: "#C89050", handFar: "#6B4824" };
+// Opponent figure: blue limbs, lighter blue fists
+const OPP:  Palette = { near: "#5090c8", far: "#1a3d6a", ctr: "#2c6098", hl: "#e74c3c", hand: "#70B0E8", handFar: "#1a3d6a" };
 
 // ── Props ─────────────────────────────────────────────────────────────────────
 
@@ -53,10 +55,15 @@ function Figure({
   const J = (k: string) => jt[k as JointKey] as { x: number; y: number };
 
   // Colour helpers: check highlight using near/far suffix
-  const nc = (prefixes: string[]) =>
+  const nc  = (prefixes: string[]) =>
     prefixes.some(p => hl.has(`${p}${ns}` as JointKey)) ? pal.hl : pal.near;
-  const fc = (prefixes: string[]) =>
+  const fc  = (prefixes: string[]) =>
     prefixes.some(p => hl.has(`${p}${fs}` as JointKey)) ? pal.hl : pal.far;
+  // Hand-specific: use distinct hand colour unless highlighted
+  const nhc = (prefixes: string[]) =>
+    prefixes.some(p => hl.has(`${p}${ns}` as JointKey)) ? pal.hl : pal.hand;
+  const fhc = (prefixes: string[]) =>
+    prefixes.some(p => hl.has(`${p}${fs}` as JointKey)) ? pal.hl : pal.handFar;
 
   const nP = { shoulder: J(`shoulder${ns}`), elbow: J(`elbow${ns}`), hand: J(`hand${ns}`),
                hip: J(`hip${ns}`), knee: J(`knee${ns}`), foot: J(`foot${ns}`) };
@@ -109,10 +116,11 @@ function Figure({
       <line x1={fP.elbow.x} y1={fP.elbow.y} x2={fP.hand.x} y2={fP.hand.y}
         stroke={fc(["elbow","hand"])} strokeWidth={4} strokeLinecap="round" />
       <circle cx={fP.elbow.x} cy={fP.elbow.y} r={3} fill={fc(["elbow"])} />
+      <circle cx={fP.hand.x} cy={fP.hand.y} r={2} fill={fhc(["hand"])} opacity={0.7} />
       <g transform={`translate(${fP.hand.x},${fP.hand.y}) rotate(${fHandOpen ? fHandAng + 90 : fHandAng})`} opacity={0.85}>
         {fHandOpen
-          ? <rect x={-6} y={-1}   width={12} height={2}   rx={0.8} fill={fc(["hand"])} />
-          : <rect x={1}  y={-2}   width={5}  height={4}   rx={1.8} fill={fc(["hand"])} />}
+          ? <rect x={-6} y={-1}   width={12} height={2}   rx={0.8} fill={fhc(["hand"])} />
+          : <rect x={1}  y={-2}   width={5}  height={4}   rx={1.8} fill={fhc(["hand"])} />}
       </g>
 
       {/* Torso / centre mass + neck (all medium, drawn before near limbs) */}
@@ -149,11 +157,12 @@ function Figure({
         <line x1={nP.elbow.x} y1={nP.elbow.y} x2={nP.hand.x} y2={nP.hand.y}
           stroke={nc(["elbow","hand"])} strokeWidth={6} strokeLinecap="round" />
         <circle cx={nP.elbow.x} cy={nP.elbow.y} r={4} fill={nc(["elbow"])} />
+        <circle cx={nP.hand.x} cy={nP.hand.y} r={3} fill={nhc(["hand"])} />
         {/* Near hand — fist: compact square / open: thin blade perpendicular to forearm */}
         <g transform={`translate(${nP.hand.x},${nP.hand.y}) rotate(${nHandOpen ? nHandAng + 90 : nHandAng})`}>
           {nHandOpen
-            ? <rect x={-7} y={-1.2} width={14} height={2.4} rx={1}   fill={nc(["hand"])} />
-            : <rect x={1}  y={-2.8} width={6}  height={5.5} rx={2.2} fill={nc(["hand"])} />}
+            ? <rect x={-7} y={-1.2} width={14} height={2.4} rx={1}   fill={nhc(["hand"])} />
+            : <rect x={1}  y={-2.8} width={7}  height={6.5} rx={2.5} fill={nhc(["hand"])} />}
         </g>
       </g>
     </>

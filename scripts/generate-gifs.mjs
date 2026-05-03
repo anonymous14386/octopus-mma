@@ -21,9 +21,11 @@ const CARD_H = 675;
 const FPS_MS = 80;
 
 // ── Palette ───────────────────────────────────────────────────────────────────
-const NEAR = "#d4cfc8";
-const FAR  = "#3c3c52";
-const CTR  = "#888090";
+const NEAR     = "#d4cfc8";
+const FAR      = "#3c3c52";
+const CTR      = "#888090";
+const HAND     = "#C89050"; // near-side fist (amber/wrap)
+const HAND_FAR = "#6B4824"; // far-side fist
 
 // ── Animation math ────────────────────────────────────────────────────────────
 
@@ -153,7 +155,8 @@ function figureSVG(joints, nearSide = "L") {
   parts.push(svgLine(fP.shoulder.x,fP.shoulder.y,fP.elbow.x,fP.elbow.y,FAR,5));
   parts.push(svgLine(fP.elbow.x,fP.elbow.y,fP.hand.x,fP.hand.y,FAR,4));
   parts.push(svgCircle(fP.elbow.x,fP.elbow.y,3,FAR));
-  parts.push(svgRect(fP.hand.x,fP.hand.y,fHandA,1,-2,5,4,1.8,FAR,'opacity="0.85"'));
+  parts.push(svgCircle(fP.hand.x,fP.hand.y,2,HAND_FAR,'opacity="0.7"'));
+  parts.push(svgRect(fP.hand.x,fP.hand.y,fHandA,1,-2,5,4,1.8,HAND_FAR,'opacity="0.85"'));
 
   // Torso center + neck
   parts.push(svgLine(sL.x,sL.y,sR.x,sR.y,CTR,5,'opacity="0.85"'));
@@ -177,8 +180,9 @@ function figureSVG(joints, nearSide = "L") {
   parts.push(svgOLine(nP.shoulder.x,nP.shoulder.y,nP.elbow.x,nP.elbow.y,NEAR,7));
   parts.push(svgOLine(nP.elbow.x,nP.elbow.y,nP.hand.x,nP.hand.y,NEAR,6));
   parts.push(svgOCircle(nP.elbow.x,nP.elbow.y,4,NEAR));
-  parts.push(svgRect(nP.hand.x,nP.hand.y,nHandA,0.4,-3.4,7.2,6.7,2.2,"rgba(10,10,20,0.72)"));
-  parts.push(svgRect(nP.hand.x,nP.hand.y,nHandA,1,-2.8,6,5.5,2.2,NEAR));
+  parts.push(svgOCircle(nP.hand.x,nP.hand.y,3,HAND));
+  parts.push(svgRect(nP.hand.x,nP.hand.y,nHandA,0.4,-3.7,8.2,7.5,2.5,"rgba(10,10,20,0.72)"));
+  parts.push(svgRect(nP.hand.x,nP.hand.y,nHandA,1,-3,7,6.5,2.5,HAND));
 
   return parts.join("\n");
 }
