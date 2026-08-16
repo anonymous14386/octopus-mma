@@ -1,6 +1,7 @@
 {
   "name": "octopus-mma",
   "version": "0.1.0",
+  "description": "Martial arts reference site — technique libraries across ten disciplines, with search",
   "private": true,
   "scripts": {
     "dev": "next dev",
