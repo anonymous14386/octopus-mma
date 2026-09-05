@@ -1,14 +1,15 @@
 {
   "name": "octopus-mma",
   "version": "0.1.0",
-  "description": "Martial arts reference site — technique libraries across ten disciplines, with search",
+  "description": "Martial arts reference site \u2014 technique libraries across ten disciplines, with search",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "gifs": "node scripts/generate-gifs.mjs",
     "build": "node scripts/generate-gifs.mjs && next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "test": "node --test test/*.test.js"
   },
   "dependencies": {
     "@resvg/resvg-js": "^2.6.2",
