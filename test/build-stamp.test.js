@@ -202,3 +202,21 @@ test('middleware does not gate the two routes', () => {
   assert.ok(!/\/api/.test(matcher) && !matcher.includes('"/:path*"'),
     `middleware now matches the API routes: ${matcher}`);
 });
+
+/**
+ * The field is `via`, not `source`.
+ *
+ * octopus-science and octopus-ee report a `source` on this same estate-wide
+ * endpoint, and there it is a second content hash of the server files. Here the
+ * value is `"env"` or `"build-id"` — which of the two paths supplied the build.
+ * Two unrelated meanings behind one field name is how someone later reads
+ * `"env"` as a broken hash and goes looking for a deploy problem that is not
+ * there.
+ */
+test('the mechanism field is named via, and never source', () => {
+  const src = fs.readFileSync(path.join(root, 'app', 'api', 'build', 'route.ts'), 'utf8');
+  assert.match(src, /build: value, via/, 'the response does not carry a `via` field');
+  assert.ok(!/source:/.test(src),
+    '`source` means a server content hash elsewhere in the estate — this endpoint ' +
+    'reports which path supplied the value, so it must not reuse that name');
+});

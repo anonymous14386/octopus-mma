@@ -21,6 +21,12 @@ import { join } from "node:path";
  *                          generateBuildId returns it. Covers the case where
  *                          the inlining does not happen as expected.
  *
+ * The field is `via`, NOT `source`. octopus-science and octopus-ee report a
+ * `source` on this same endpoint and it means something entirely different
+ * there — a second, server-side content hash. Two unrelated meanings behind one
+ * field name on one estate-wide endpoint is how someone later reads `"env"` as a
+ * broken hash. `via` says what it is: which of the two paths supplied the value.
+ *
  * 'unknown' is the deliberate failure value — not hash-shaped, so it cannot be
  * misread as one. `unknown` is never `current`.
  *
@@ -29,27 +35,27 @@ import { join } from "node:path";
  */
 export const dynamic = "force-dynamic";
 
-function build(): { build: string; source: string } {
+function build(): { build: string; via: string } {
   // "unknown" is truthy, and it is exactly what the config yields when it is
   // re-evaluated at runtime in an image with no sources. Accepting it here
   // would report a failure value as an answer and never try the fallback that
   // does have the real one.
   const inlined = process.env.MMA_BUILD;
-  if (inlined && inlined !== "unknown") return { build: inlined, source: "env" };
+  if (inlined && inlined !== "unknown") return { build: inlined, via: "env" };
 
   try {
     const id = readFileSync(join(process.cwd(), ".next", "BUILD_ID"), "utf8").trim();
-    if (id) return { build: id, source: "build-id" };
+    if (id) return { build: id, via: "build-id" };
   } catch {
     /* not readable — fall through to unknown rather than throwing */
   }
-  return { build: "unknown", source: "none" };
+  return { build: "unknown", via: "none" };
 }
 
 export async function GET() {
-  const { build: value, source } = build();
+  const { build: value, via } = build();
   return NextResponse.json(
-    { ok: true, service: "octopus-mma", build: value, source },
+    { ok: true, service: "octopus-mma", build: value, via },
     { headers: { "Cache-Control": "no-store" } },
   );
 }
