@@ -179,6 +179,10 @@ test('the route prefers the inlined value and falls back without throwing', () =
  * about, which is worse than no check at all.
  */
 test('neither route may be cached', () => {
+  // Both live under /api. /health is NOT available at the top level: the
+  // app/[discipline] dynamic segment owns every root path, so /health renders
+  // Next's 404 as "the discipline named health" — confirmed against the
+  // deployed site, not assumed.
   for (const name of ['build', 'health']) {
     const src = fs.readFileSync(path.join(root, 'app', 'api', name, 'route.ts'), 'utf8');
     assert.match(src, /export const dynamic = "force-dynamic";/, `/api/${name} may be statically rendered`);
